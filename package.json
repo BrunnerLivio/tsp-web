@@ -19,6 +19,11 @@
   "license": "ISC",
   "dependencies": {
     "child_process": "^1.0.2",
-    "node-shell-parser": "^0.2.1"
+    "express": "^4.14.0",
+    "jquery": "^3.1.1",
+    "node-shell-parser": "^0.2.1",
+    "socket.io": "^1.4.8",
+    "tablesorter": "^2.27.8",
+    "vue": "^2.0.1"
   }
 }

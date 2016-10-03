@@ -1,0 +1,29 @@
+{
+    "node":         true,
+    "bitwise":      true,
+    "browser":      true,
+    "camelcase":    true,
+    "curly":        true,
+    "eqeqeq":       true,
+    "esnext":       true,
+    "immed":        true,
+    "indent":       4,
+    "latedef":      true,
+    "newcap":       true,
+    "noarg":        true,
+    "quotmark":     "single",
+    "regexp":       true,
+    "smarttabs":    true,
+    "strict":       true,
+    "sub":          true,
+    "trailing":     true,
+    "undef":        true,
+    "unused":       true,
+    "jquery":       true,
+    "es3":          true,
+    "globalstrict": true,
+    "laxcomma":     true,
+    "predef":   {
+        "__dirname": true
+    }
+}
