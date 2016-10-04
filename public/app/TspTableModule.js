@@ -60,9 +60,9 @@ var TspTableModule = (function (socket) {
     function getHTMLByRow(row) {
         var html = '';
         html += '<tr>';
+        html += '<td>' + row.ID + '</td>';
         html += '<td>' + row.Command + '</td>';
         html += '<td>' + row.ELevel + '</td>';
-        html += '<td>' + row.ID + '</td>';
         if (row.Output !== "(file)") {
             html += '<td><a onclick="FileStreamModule.openDialog(\'' + row.Output + '\')" href="#">' + row.Output + '</a></td>';
         } else {
