@@ -8,23 +8,28 @@
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/tablesorter/dist/js/jquery.tablesorter.min.js"></script>
     <script src="app/app.js"></script>
+
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
 <body>
-    <table id="tspTable">
-        <thead>
-            <tr>
-                <th onclick="TspTableModule.sort('Command');">Command</th>
-                <th onclick="TspTableModule.sort('ELevel');">E-Level</th>
-                <th onclick="TspTableModule.sort('ID');">ID</th>
-                <th onclick="TspTableModule.sort('Output');">Output</th>
-                <th onclick="TspTableModule.sort('State');">State</th>
-                <th onclick="TspTableModule.sort('Times');">Times(r/u/s)</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div class="card">
+        <h2> TSP Monitor </h2>
+        <table id="tspTable">
+            <thead>
+                <tr>
+                    <th onclick="TspTableModule.sort('Command');">Command</th>
+                    <th onclick="TspTableModule.sort('ELevel');">E-Level</th>
+                    <th onclick="TspTableModule.sort('ID');">ID</th>
+                    <th onclick="TspTableModule.sort('Output');">Output</th>
+                    <th onclick="TspTableModule.sort('State');">State</th>
+                    <th onclick="TspTableModule.sort('Times');">Times(r/u/s)</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>
