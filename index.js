@@ -1,4 +1,4 @@
-var tspReader = require('./src/tsp-reader/tsp-reader'),
+var tsp = require('./src/tsp'),
     fileLivestreamer = require('./src/file-livestreamer/file-liverstreamer');
 express = require('express'),
     app = express(),
@@ -35,11 +35,12 @@ io.on('connection', function (socket) {
             .watch();
     });
 
-    tspreader = tspReader()
+    tspreader = tsp.reader()
         .subscribe(function (data) {
             io.sockets.emit("newTspData", data);
         })
         .watch();
+
     socket.on('disconnect', function () {
         if (fileStreamer) {
             fileStreamer.stop();
