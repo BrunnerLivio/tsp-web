@@ -4,7 +4,8 @@ var spawn = require('child_process').spawn,
 function tspReader() {
     var promise,
         tsp,
-        shellOutput = '';
+        shellOutput = '',
+        intervalId;
 
     function subscribe(_promise) {
         promise = _promise;
@@ -12,9 +13,12 @@ function tspReader() {
     }
 
     function watch() {
-        setInterval(function () {
+        run();
+        intervalId = setInterval(function () {
             run();
         }, 1000);
+
+        return public;
     }
 
     function run() {
@@ -39,14 +43,22 @@ function tspReader() {
         return public;
     }
 
+    function stop() {
+        if (intervalId) {
+            clearInterval(intervalId);
+        }
+        return public;
+    }
+
     var public = {
         subscribe: subscribe,
         watch: watch,
-        run: run
+        run: run,
+        stop: stop
     };
 
     return public;
 }
 
 
-module.exports = tspReader();
+module.exports = tspReader;
