@@ -22,7 +22,10 @@ function tspReader() {
         shellOutput = '';
 
         tsp.stdout.on('data', function (data) {
-            data = data.toString().replace(/\[run=[0-9]\/[0-9]\]/g, '');
+            data = data.toString();
+            data = data.replace(/\[run=[0-9]\/[0-9]\]/g, '');
+            data = data.replace(/E-Level/g, 'ELevel ');
+            data = data.replace(/Times\(r\/u\/s\)/g, 'Times       ');
             shellOutput += data;
         });
 
