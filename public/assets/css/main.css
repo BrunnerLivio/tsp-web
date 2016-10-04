@@ -1,4 +1,4 @@
-@import 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500';
+@import 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500|Roboto+Mono';
 * {
     margin: 0;
     padding: 0;
@@ -93,4 +93,48 @@ tr:not(#header):hover {
 
 .state-queued {
     background-color: #fff176;
+}
+
+.dialog-shadow {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+.dialog {
+    width: 80vw;
+    height: 80vh;
+    background-color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    border-radius: 5px;
+    padding-bottom: 90px;
+}
+
+.dialog .content {
+    background-color: #1D1F20;
+    height: 100%;
+    overflow-y: scroll;
+    color: #eeeeee;
+    padding: 5px;
+    font-family: 'Roboto Mono', monospace;
+    margin: 15px;
+}
+
+a {
+    color: #2196F3;
+    cursor: pointer;
 }

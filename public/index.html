@@ -7,7 +7,9 @@
     <script src="node_modules/socket.io-client/socket.io.js"></script>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/tablesorter/dist/js/jquery.tablesorter.min.js"></script>
-    <script src="app/app.js"></script>
+    <script src="app/SocketFactory.js"></script>
+    <script src="app/FileStreamModule.js"></script>
+    <script src="app/TspTableModule.js"></script>
 
     <link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -29,6 +31,12 @@
             <tbody>
             </tbody>
         </table>
+    </div>
+    <div class="dialog-shadow" id="fileStreamDialogShadow"></div>
+    <div class="dialog" id="fileStreamDialog">
+        <h2> Filestream</h2>
+        <div class="content">
+        </div>
     </div>
 </body>
 

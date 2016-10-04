@@ -1,9 +1,8 @@
-var TspTableModule = (function () {
+var TspTableModule = (function (socket) {
     var self = this,
         $tspTable,
         $tbody,
-        $tr,
-        socket = io.connect();
+        $tr;
 
     $(document).ready(init);
 
@@ -64,7 +63,11 @@ var TspTableModule = (function () {
         html += '<td>' + row.Command + '</td>';
         html += '<td>' + row.ELevel + '</td>';
         html += '<td>' + row.ID + '</td>';
-        html += '<td>' + row.Output + '</td>';
+        if (row.Output !== "(file)") {
+            html += '<td><a onclick="FileStreamModule.openDialog(\'' + row.Output + '\')" href="#">' + row.Output + '</a></td>';
+        } else {
+            html += '<td>' + row.Output + '</td>';
+        }
         html += '<td class="state-' + row.State.toLowerCase() + '">' + row.State + '</td>';
         html += '<td>' + row.Times + '</td>';
         return html;
@@ -83,4 +86,4 @@ var TspTableModule = (function () {
         sort: sort,
         render: render
     };
-})();
+})(Socket, FileStreamModule);
