@@ -1,0 +1,11 @@
+{
+    "node": true,
+    "globals": {
+        "$": false,
+        "io": false,
+        "confirm": false,
+        "Socket": false,
+        "FileStreamModule": false
+    },
+    "browser": true
+}
