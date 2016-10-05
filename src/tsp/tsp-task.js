@@ -18,4 +18,4 @@ function tspTask() {
 }
 
 
-module.exports = tspTask;
+module.exports = tspTask();

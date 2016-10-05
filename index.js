@@ -1,6 +1,6 @@
 var tsp = require('./src/tsp'),
-    fileLivestreamer = require('./src/file-livestreamer/file-liverstreamer');
-express = require('express'),
+    fileLivestreamer = require('./src/file-livestreamer/file-liverstreamer'),
+    express = require('express'),
     app = express(),
     http = require('http').createServer(app),
     io = require("socket.io").listen(http);
@@ -11,6 +11,16 @@ app.set("port", 3000);
 
 app.get("/", function (request, response) {
     response.sendFile(__dirname + "/public/index.html");
+});
+
+app.delete('/task/:id', function (request, response) {
+    tsp.task.remove(request.params.id);
+    response.status(200).end();
+});
+
+app.delete('/kill-all-tasks', function(request, response){
+    tsp.task.killAll();
+    response.status(200).end();
 });
 
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
