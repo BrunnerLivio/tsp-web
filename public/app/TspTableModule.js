@@ -70,7 +70,7 @@ var TspTableModule = (function (socket) {
         }
         html += '<td class="state-' + row.State.toLowerCase() + '">' + row.State + '</td>';
         html += '<td>' + row.Times + '</td>';
-        html += '<td><i class="material-icons md-36 remove-task" onclick="TspTableModule.removeTask(' + row.ID + ', event)">delete</i></td>';
+        html += '<td><i class="material-icons md-36 remove-task hint--bottom" aria-label="Remove Task" onclick="TspTableModule.removeTask(' + row.ID + ', event)">delete</i></td>';
         return html;
 
     }
