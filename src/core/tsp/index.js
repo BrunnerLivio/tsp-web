@@ -1,3 +1,5 @@
+"use strict";
+
 var tspReader = require('./tsp-reader'),
     tspTask = require('./tsp-task');
 

@@ -1,3 +1,5 @@
+"use strict";
+
 var spawn = require('child_process').spawn;
 
 /**
@@ -8,6 +10,9 @@ var spawn = require('child_process').spawn;
  * @returns {Object} A collection of public possible methods
  */
 function tspTask() {
+
+    var tsp;
+
     /**
      * @name remove
      * @description
@@ -32,12 +37,12 @@ function tspTask() {
         tsp = spawn('tsp', ['-K']);
     }
 
-    var public = {
+    var methods = {
         remove: remove,
         killAll: killAll
     };
 
-    return public;
+    return methods;
 }
 
 

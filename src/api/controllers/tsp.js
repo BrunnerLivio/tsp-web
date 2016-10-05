@@ -1,3 +1,5 @@
+"use strict";
+
 var tsp = require('../../core/tsp');
 
 module.exports = function (socket, io) {

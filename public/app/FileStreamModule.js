@@ -1,3 +1,5 @@
+"use strict";
+
 var FileStreamModule = (function (socket) {
     var self = this,
         $fileStreamDialog,

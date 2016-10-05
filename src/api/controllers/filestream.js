@@ -1,3 +1,5 @@
+"use strict";
+
 var fileLivestreamer = require('../../core/file-livestreamer/file-liverstreamer');
 
 module.exports = function (socket, io) {

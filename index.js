@@ -1,3 +1,5 @@
+"use strict";
+
 var express = require('express'),
     app = express(),
     http = require('http').createServer(app),

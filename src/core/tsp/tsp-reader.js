@@ -1,3 +1,5 @@
+"use strict";
+
 var spawn = require('child_process').spawn,
     shellParser = require('node-shell-parser');
 
@@ -27,7 +29,7 @@ function tspReader() {
      */
     function subscribe(_promise) {
         promise = _promise;
-        return public;
+        return methods;
     }
 
     /**
@@ -48,7 +50,7 @@ function tspReader() {
             run();
         }, 1000);
 
-        return public;
+        return methods;
     }
 
     /**
@@ -81,7 +83,7 @@ function tspReader() {
             }
         });
 
-        return public;
+        return methods;
     }
 
     /**
@@ -98,17 +100,17 @@ function tspReader() {
         if (intervalId) {
             clearInterval(intervalId);
         }
-        return public;
+        return methods;
     }
 
-    var public = {
+    var methods = {
         subscribe: subscribe,
         watch: watch,
         run: run,
         stop: stop
     };
 
-    return public;
+    return methods;
 }
 
 

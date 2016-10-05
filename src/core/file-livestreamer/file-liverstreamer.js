@@ -1,14 +1,16 @@
+"use strict";
+
 var spawn = require('child_process').spawn,
     fs = require('fs');
 /**
- * @module fileLivestreamer
+ * @module FileLivestreamer
  * @description
  * Module for livestreaming a file async.
  * 
  * @param {string} fileName Path of the file it should stream. E.g. /tmp/myfile.txt
  * @returns {Object} A collection of public possible methods
  */
-function fileLivestreamer(fileName) {
+function FileLivestreamer(fileName) {
     var self = this;
     self.fileName = fileName;
 
@@ -25,7 +27,7 @@ function fileLivestreamer(fileName) {
      */
     function subscribe(promise) {
         self.promise = promise;
-        return public;
+        return methods;
     }
 
     /**
@@ -65,7 +67,7 @@ function fileLivestreamer(fileName) {
         self.watcher = fs.watch(self.fileName, function (curr, prev) {
             pushFileContent();
         });
-        return public;
+        return methods;
     }
 
     /**
@@ -81,18 +83,17 @@ function fileLivestreamer(fileName) {
         if (self.watcher) {
             self.watcher.close();
         }
-        return public;
+        return methods;
     }
 
-    var public = {
+    var methods = {
         subscribe: subscribe,
         watch: watch,
-        run: run,
         stop: stop
     };
 
-    return public;
+    return methods;
 }
 
 
-module.exports = fileLivestreamer;
+module.exports = FileLivestreamer;
