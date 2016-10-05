@@ -97,10 +97,23 @@ var TspTableModule = (function (socket) {
         }
     }
 
+    function killAllTasks() {
+        if (!isMakingRequest && confirm("Do you really want to kill all tasks?")) {
+            isMakingRequest = true;
+            $.ajax({
+                url: '/kill-all-tasks',
+                type: 'DELETE',
+                success: function () {
+                    isMakingRequest = false;
+                }
+            });
+        }
+    }
 
     return {
         sort: sort,
         render: render,
-        removeTask: removeTask
+        removeTask: removeTask,
+        killAllTasks: killAllTasks
     };
 })(Socket, FileStreamModule);
