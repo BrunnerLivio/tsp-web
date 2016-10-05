@@ -1,4 +1,4 @@
-var TspTableModule = (function (socket) {
+var TspTableModule = (function (socket, FileStreamModule) {
     var self = this,
         $tspTable,
         $tbody,
@@ -6,6 +6,14 @@ var TspTableModule = (function (socket) {
 
     $(document).ready(init);
 
+    /**
+     * @name init
+     * @description
+     * Binds the websocket methods and
+     * set initial variable values.
+     * Gets called when the document is ready
+     * 
+     */
     function init() {
         $tspTable = $('#tspTable');
         $tbody = $tspTable.find('tbody');
@@ -17,11 +25,27 @@ var TspTableModule = (function (socket) {
         socket.on('newTspData', onNewTspData);
     }
 
+    /**
+     * @name onNewTspData
+     * @description
+     * Sets the given data as member variable and
+     * sorts the data and renders it
+     * 
+     * @param {Object[]} data The data from the backend
+     */
     function onNewTspData(data) {
         self.data = data;
         sort();
     }
 
+    /**
+     * @name sort
+     * @description
+     * Sorts the tsp data by the given property name 
+     * and renders 
+     * 
+     * @param {String} property The name of the property to sort
+     */
     function sort(property) {
         if (property === undefined) {
             property = self.currentProperty;
@@ -57,6 +81,15 @@ var TspTableModule = (function (socket) {
         render();
     }
 
+    /**
+     * @name getHTMLByRow
+     * @description
+     * Generates the html by the given row
+     * 
+     * @param {Object} row The row object from the backend
+     * 
+     * @returns {String} The generated html
+     */
     function getHTMLByRow(row) {
         var html = '';
         html += '<tr>';
@@ -75,14 +108,30 @@ var TspTableModule = (function (socket) {
 
     }
 
+    /**
+     * @name render
+     * @description
+     * Renders the tsp table rows.
+     */
     function render() {
         $('#tspTable tbody tr').remove();
         self.data.forEach(function (row) {
             $tbody.append(getHTMLByRow(row));
         });
     }
+
     var isMakingRequest = false;
 
+    /**
+     * @name removeTask
+     * @description
+     * Removes the specific task with the given id and 
+     * removes the parent <tr> Element of the given 
+     * event argument target 
+     * 
+     * @param {Number} taskId The task to delete
+     * @param {Evenet} event Event arguments
+     */
     function removeTask(taskId, event) {
         if (!isMakingRequest && confirm("Do you really want to remove this task?")) {
             isMakingRequest = true;
@@ -97,6 +146,11 @@ var TspTableModule = (function (socket) {
         }
     }
 
+    /**
+     * @name killAllTasks
+     * @description
+     * Kills all tasks by sending a DELETE-request to the backend api
+     */
     function killAllTasks() {
         if (!isMakingRequest && confirm("Do you really want to kill all tasks?")) {
             isMakingRequest = true;
