@@ -7,5 +7,7 @@
         "Socket": false,
         "FileStreamModule": false
     },
-    "browser": true
+    "browser": true,
+    "expr": true,
+    "mocha": true
 }

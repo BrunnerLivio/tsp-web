@@ -1,7 +1,7 @@
 "use strict";
 
 var FileStreamModule = (function (socket) {
-    var self = this,
+    var self = {},
         $fileStreamDialog,
         $fileStreamDialogShadow,
         $content;

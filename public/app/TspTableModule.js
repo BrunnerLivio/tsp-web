@@ -1,7 +1,7 @@
 "use strict";
 
 var TspTableModule = (function (socket, FileStreamModule) {
-    var self = this,
+    var self = {},
         $tspTable,
         $tbody,
         $tr;

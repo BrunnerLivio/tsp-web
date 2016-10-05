@@ -11,7 +11,7 @@ var spawn = require('child_process').spawn,
  * @returns {Object} A collection of public possible methods
  */
 function FileLivestreamer(fileName) {
-    var self = this;
+    var self = this || {};
     self.fileName = fileName;
 
     /**
