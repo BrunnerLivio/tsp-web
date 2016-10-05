@@ -7,7 +7,7 @@ module.exports = function (socket, io) {
 
     tspreader = tsp.reader()
         .subscribe(function (data) {
-            io.sockets.emit("newTspData", data);
+            io.sockets.emit('newTspData', data);
         })
         .watch();
 

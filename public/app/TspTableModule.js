@@ -98,7 +98,7 @@ var TspTableModule = (function (socket, FileStreamModule) {
         html += '<td>' + row.ID + '</td>';
         html += '<td>' + row.Command + '</td>';
         html += '<td>' + row.ELevel + '</td>';
-        if (row.Output !== "(file)") {
+        if (row.Output !== '(file)') {
             html += '<td><a onclick="FileStreamModule.openDialog(\'' + row.Output + '\')" href="#">' + row.Output + '</a></td>';
         } else {
             html += '<td>' + row.Output + '</td>';
@@ -135,7 +135,7 @@ var TspTableModule = (function (socket, FileStreamModule) {
      * @param {Evenet} event Event arguments
      */
     function removeTask(taskId, event) {
-        if (!isMakingRequest && confirm("Do you really want to remove this task?")) {
+        if (!isMakingRequest && confirm('Do you really want to remove this task?')) {
             isMakingRequest = true;
             $.ajax({
                 url: '/task/' + taskId,
@@ -154,7 +154,7 @@ var TspTableModule = (function (socket, FileStreamModule) {
      * Kills all tasks by sending a DELETE-request to the backend api
      */
     function killAllTasks() {
-        if (!isMakingRequest && confirm("Do you really want to kill all tasks?")) {
+        if (!isMakingRequest && confirm('Do you really want to kill all tasks?')) {
             isMakingRequest = true;
             $.ajax({
                 url: '/kill-all-tasks',
