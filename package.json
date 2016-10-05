@@ -26,5 +26,9 @@
     "socket.io": "^1.4.8",
     "tablesorter": "^2.27.8",
     "vue": "^2.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.0"
   }
 }
