@@ -70,6 +70,7 @@ var TspTableModule = (function (socket) {
         }
         html += '<td class="state-' + row.State.toLowerCase() + '">' + row.State + '</td>';
         html += '<td>' + row.Times + '</td>';
+        html += '<td><i class="material-icons md-36 remove-task" onclick="TspTableModule.removeTask(' + row.ID + ', event)">delete</i></td>';
         return html;
 
     }
@@ -80,10 +81,26 @@ var TspTableModule = (function (socket) {
             $tbody.append(getHTMLByRow(row));
         });
     }
+    var isMakingRequest = false;
+
+    function removeTask(taskId, event) {
+        if (!isMakingRequest && confirm("Do you really want to remove this task?")) {
+            isMakingRequest = true;
+            $.ajax({
+                url: '/task/' + taskId,
+                type: 'DELETE',
+                success: function () {
+                    $(event.target).parent('tr').remove();
+                    isMakingRequest = false;
+                }
+            });
+        }
+    }
 
 
     return {
         sort: sort,
-        render: render
+        render: render,
+        removeTask: removeTask
     };
 })(Socket, FileStreamModule);
