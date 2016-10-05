@@ -20,6 +20,7 @@
   "dependencies": {
     "child_process": "^1.0.2",
     "express": "^4.14.0",
+    "hint.css": "^2.4.0",
     "jquery": "^3.1.1",
     "node-shell-parser": "^0.2.1",
     "socket.io": "^1.4.8",

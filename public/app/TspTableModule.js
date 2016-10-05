@@ -60,9 +60,9 @@ var TspTableModule = (function (socket) {
     function getHTMLByRow(row) {
         var html = '';
         html += '<tr>';
+        html += '<td>' + row.ID + '</td>';
         html += '<td>' + row.Command + '</td>';
         html += '<td>' + row.ELevel + '</td>';
-        html += '<td>' + row.ID + '</td>';
         if (row.Output !== "(file)") {
             html += '<td><a onclick="FileStreamModule.openDialog(\'' + row.Output + '\')" href="#">' + row.Output + '</a></td>';
         } else {
@@ -70,6 +70,7 @@ var TspTableModule = (function (socket) {
         }
         html += '<td class="state-' + row.State.toLowerCase() + '">' + row.State + '</td>';
         html += '<td>' + row.Times + '</td>';
+        html += '<td><i class="material-icons md-36 remove-task hint--bottom" aria-label="Remove Task" onclick="TspTableModule.removeTask(' + row.ID + ', event)">delete</i></td>';
         return html;
 
     }
@@ -80,10 +81,39 @@ var TspTableModule = (function (socket) {
             $tbody.append(getHTMLByRow(row));
         });
     }
+    var isMakingRequest = false;
 
+    function removeTask(taskId, event) {
+        if (!isMakingRequest && confirm("Do you really want to remove this task?")) {
+            isMakingRequest = true;
+            $.ajax({
+                url: '/task/' + taskId,
+                type: 'DELETE',
+                success: function () {
+                    $(event.target).parent('tr').remove();
+                    isMakingRequest = false;
+                }
+            });
+        }
+    }
+
+    function killAllTasks() {
+        if (!isMakingRequest && confirm("Do you really want to kill all tasks?")) {
+            isMakingRequest = true;
+            $.ajax({
+                url: '/kill-all-tasks',
+                type: 'DELETE',
+                success: function () {
+                    isMakingRequest = false;
+                }
+            });
+        }
+    }
 
     return {
         sort: sort,
-        render: render
+        render: render,
+        removeTask: removeTask,
+        killAllTasks: killAllTasks
     };
 })(Socket, FileStreamModule);

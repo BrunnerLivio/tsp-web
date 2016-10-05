@@ -11,6 +11,8 @@
     <script src="app/FileStreamModule.js"></script>
     <script src="app/TspTableModule.js"></script>
 
+    <link rel="stylesheet" href="node_modules/hint.css/hint.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
@@ -20,12 +22,15 @@
         <table id="tspTable">
             <thead>
                 <tr>
+                    <th onclick="TspTableModule.sort('ID');">ID</th>
                     <th onclick="TspTableModule.sort('Command');">Command</th>
                     <th onclick="TspTableModule.sort('ELevel');">E-Level</th>
-                    <th onclick="TspTableModule.sort('ID');">ID</th>
                     <th onclick="TspTableModule.sort('Output');">Output</th>
                     <th onclick="TspTableModule.sort('State');">State</th>
                     <th onclick="TspTableModule.sort('Times');">Times(r/u/s)</th>
+                    <th>
+                        <i class="material-icons md-36 remove-task hint--bottom" aria-label="Kill all tasks" onclick="TspTableModule.killAllTasks()">delete</i>
+                    </th>
                 </tr>
             </thead>
             <tbody>
