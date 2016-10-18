@@ -1,3 +1,5 @@
+'use strict';
+
 /* eslint-env browser */
 
 /**
@@ -31,7 +33,7 @@ exports.inherits = require('util').inherits;
  * @param  {string} html
  * @return {string}
  */
-exports.escape = function(html) {
+exports.escape = function (html) {
   return String(html)
     .replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;')
@@ -47,7 +49,7 @@ exports.escape = function(html) {
  * @param {Function} fn
  * @param {Object} scope
  */
-exports.forEach = function(arr, fn, scope) {
+exports.forEach = function (arr, fn, scope) {
   for (var i = 0, l = arr.length; i < l; i++) {
     fn.call(scope, arr[i], i);
   }
@@ -60,7 +62,7 @@ exports.forEach = function(arr, fn, scope) {
  * @param {Object} obj
  * @return {boolean}
  */
-exports.isString = function(obj) {
+exports.isString = function (obj) {
   return typeof obj === 'string';
 };
 
@@ -73,7 +75,7 @@ exports.isString = function(obj) {
  * @param {Object} scope
  * @return {Array}
  */
-exports.map = function(arr, fn, scope) {
+exports.map = function (arr, fn, scope) {
   var result = [];
   for (var i = 0, l = arr.length; i < l; i++) {
     result.push(fn.call(scope, arr[i], i, arr));
@@ -90,7 +92,7 @@ exports.map = function(arr, fn, scope) {
  * @param {number} start
  * @return {number}
  */
-var indexOf = exports.indexOf = function(arr, obj, start) {
+var indexOf = exports.indexOf = function (arr, obj, start) {
   for (var i = start || 0, l = arr.length; i < l; i++) {
     if (arr[i] === obj) {
       return i;
@@ -108,7 +110,7 @@ var indexOf = exports.indexOf = function(arr, obj, start) {
  * @param {Object} val Initial value.
  * @return {*}
  */
-var reduce = exports.reduce = function(arr, fn, val) {
+var reduce = exports.reduce = function (arr, fn, val) {
   var rval = val;
 
   for (var i = 0, l = arr.length; i < l; i++) {
@@ -126,7 +128,7 @@ var reduce = exports.reduce = function(arr, fn, val) {
  * @param {Function} fn
  * @return {Array}
  */
-exports.filter = function(arr, fn) {
+exports.filter = function (arr, fn) {
   var ret = [];
 
   for (var i = 0, l = arr.length; i < l; i++) {
@@ -147,7 +149,7 @@ exports.filter = function(arr, fn) {
  * @param {Function} fn
  * @return {Array}
  */
-exports.some = function(arr, fn) {
+exports.some = function (arr, fn) {
   for (var i = 0, l = arr.length; i < l; i++) {
     if (fn(arr[i])) {
       return true;
@@ -163,7 +165,7 @@ exports.some = function(arr, fn) {
  * @param {Object} obj
  * @return {Array} keys
  */
-exports.keys = typeof Object.keys === 'function' ? Object.keys : function(obj) {
+exports.keys = typeof Object.keys === 'function' ? Object.keys : function (obj) {
   var keys = [];
   var has = Object.prototype.hasOwnProperty; // for `window` on <=IE8
 
@@ -184,11 +186,11 @@ exports.keys = typeof Object.keys === 'function' ? Object.keys : function(obj) {
  * @param {Array} files
  * @param {Function} fn
  */
-exports.watch = function(files, fn) {
+exports.watch = function (files, fn) {
   var options = { interval: 100 };
-  files.forEach(function(file) {
+  files.forEach(function (file) {
     debug('file %s', file);
-    watchFile(file, options, function(curr, prev) {
+    watchFile(file, options, function (curr, prev) {
       if (prev.mtime < curr.mtime) {
         fn(file);
       }
@@ -203,7 +205,7 @@ exports.watch = function(files, fn) {
  * @param {Object} obj
  * @return {Boolean}
  */
-var isArray = typeof Array.isArray === 'function' ? Array.isArray : function(obj) {
+var isArray = typeof Array.isArray === 'function' ? Array.isArray : function (obj) {
   return Object.prototype.toString.call(obj) === '[object Array]';
 };
 
@@ -215,7 +217,7 @@ exports.isArray = isArray;
  * @type {Function}
  */
 if (typeof Buffer !== 'undefined' && Buffer.prototype) {
-  Buffer.prototype.toJSON = Buffer.prototype.toJSON || function() {
+  Buffer.prototype.toJSON = Buffer.prototype.toJSON || function () {
     return Array.prototype.slice.call(this, 0);
   };
 }
@@ -227,7 +229,7 @@ if (typeof Buffer !== 'undefined' && Buffer.prototype) {
  * @param {string} path
  * @return {boolean}
  */
-function ignored(path) {
+function ignored (path) {
   return !~ignore.indexOf(path);
 }
 
@@ -240,7 +242,7 @@ function ignored(path) {
  * @param {Array} [ret=[]]
  * @return {Array}
  */
-exports.files = function(dir, ext, ret) {
+exports.files = function (dir, ext, ret) {
   ret = ret || [];
   ext = ext || ['js'];
 
@@ -248,7 +250,7 @@ exports.files = function(dir, ext, ret) {
 
   readdirSync(dir)
     .filter(ignored)
-    .forEach(function(path) {
+    .forEach(function (path) {
       path = join(dir, path);
       if (statSync(path).isDirectory()) {
         exports.files(path, ext, ret);
@@ -267,7 +269,7 @@ exports.files = function(dir, ext, ret) {
  * @param {string} str
  * @return {string}
  */
-exports.slug = function(str) {
+exports.slug = function (str) {
   return str
     .toLowerCase()
     .replace(/ +/g, '-')
@@ -280,7 +282,7 @@ exports.slug = function(str) {
  * @param {string} str
  * @return {string}
  */
-exports.clean = function(str) {
+exports.clean = function (str) {
   str = str
     .replace(/\r\n?|[\n\u2028\u2029]/g, '\n').replace(/^\uFEFF/, '')
     // (traditional)->  space/name     parameters    body     (lambda)-> parameters       body   multi-statement/single          keep body content
@@ -288,7 +290,7 @@ exports.clean = function(str) {
 
   var spaces = str.match(/^\n?( *)/)[1].length;
   var tabs = str.match(/^\n?(\t*)/)[1].length;
-  var re = new RegExp('^\n?' + (tabs ? '\t' : ' ') + '{' + (tabs ? tabs : spaces) + '}', 'gm');
+  var re = new RegExp('^\n?' + (tabs ? '\t' : ' ') + '{' + (tabs || spaces) + '}', 'gm');
 
   str = str.replace(re, '');
 
@@ -302,7 +304,7 @@ exports.clean = function(str) {
  * @param {string} str
  * @return {string}
  */
-exports.trim = function(str) {
+exports.trim = function (str) {
   return str.replace(/^\s+|\s+$/g, '');
 };
 
@@ -313,8 +315,8 @@ exports.trim = function(str) {
  * @param {string} qs
  * @return {Object}
  */
-exports.parseQuery = function(qs) {
-  return reduce(qs.replace('?', '').split('&'), function(obj, pair) {
+exports.parseQuery = function (qs) {
+  return reduce(qs.replace('?', '').split('&'), function (obj, pair) {
     var i = pair.indexOf('=');
     var key = pair.slice(0, i);
     var val = pair.slice(++i);
@@ -331,7 +333,7 @@ exports.parseQuery = function(qs) {
  * @param {string} js
  * @return {string}
  */
-function highlight(js) {
+function highlight (js) {
   return js
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -349,7 +351,7 @@ function highlight(js) {
  * @api private
  * @param {string} name
  */
-exports.highlightTags = function(name) {
+exports.highlightTags = function (name) {
   var code = document.getElementById('mocha').getElementsByTagName(name);
   for (var i = 0, len = code.length; i < len; ++i) {
     code[i].innerHTML = highlight(code[i].innerHTML);
@@ -370,7 +372,7 @@ exports.highlightTags = function(name) {
  * @param {string} typeHint The type of the value
  * @returns {string}
  */
-function emptyRepresentation(value, typeHint) {
+function emptyRepresentation (value, typeHint) {
   switch (typeHint) {
     case 'function':
       return '[Function]';
@@ -404,7 +406,7 @@ function emptyRepresentation(value, typeHint) {
  * type(global) // 'global'
  * type(new String('foo') // 'object'
  */
-var type = exports.type = function type(value) {
+var type = exports.type = function type (value) {
   if (value === undefined) {
     return 'undefined';
   } else if (value === null) {
@@ -432,7 +434,7 @@ var type = exports.type = function type(value) {
  * @param {*} value
  * @return {string}
  */
-exports.stringify = function(value) {
+exports.stringify = function (value) {
   var typeHint = type(value);
 
   if (!~indexOf(['object', 'array', 'function'], typeHint)) {
@@ -446,7 +448,7 @@ exports.stringify = function(value) {
     // IE7/IE8 has a bizarre String constructor; needs to be coerced
     // into an array and back to obj.
     if (typeHint === 'string' && typeof value === 'object') {
-      value = reduce(value.split(''), function(acc, char, idx) {
+      value = reduce(value.split(''), function (acc, char, idx) {
         acc[idx] = char;
         return acc;
       }, {});
@@ -474,7 +476,7 @@ exports.stringify = function(value) {
  * @param {number=} depth
  * @returns {*}
  */
-function jsonStringify(object, spaces, depth) {
+function jsonStringify (object, spaces, depth) {
   if (typeof spaces === 'undefined') {
     // primitive types
     return _stringify(object);
@@ -486,11 +488,11 @@ function jsonStringify(object, spaces, depth) {
   var end = isArray(object) ? ']' : '}';
   var length = typeof object.length === 'number' ? object.length : exports.keys(object).length;
   // `.repeat()` polyfill
-  function repeat(s, n) {
+  function repeat (s, n) {
     return new Array(n).join(s);
   }
 
-  function _stringify(val) {
+  function _stringify (val) {
     switch (type(val)) {
       case 'null':
       case 'undefined':
@@ -536,15 +538,15 @@ function jsonStringify(object, spaces, depth) {
       continue; // not my business
     }
     --length;
-    str += '\n ' + repeat(' ', space)
-      + (isArray(object) ? '' : '"' + i + '": ') // key
-      + _stringify(object[i])                     // value
-      + (length ? ',' : '');                     // comma
+    str += '\n ' + repeat(' ', space) +
+      (isArray(object) ? '' : '"' + i + '": ') + // key
+      _stringify(object[i]) +                    // value
+      (length ? ',' : '');                       // comma
   }
 
-  return str
+  return str +
     // [], {}
-    + (str.length !== 1 ? '\n' + repeat(' ', --space) + end : end);
+    (str.length !== 1 ? '\n' + repeat(' ', --space) + end : end);
 }
 
 /**
@@ -554,7 +556,7 @@ function jsonStringify(object, spaces, depth) {
  * @param {*} value The value to test.
  * @return {boolean} True if `value` is a buffer, otherwise false
  */
-exports.isBuffer = function(value) {
+exports.isBuffer = function (value) {
   return typeof Buffer !== 'undefined' && Buffer.isBuffer(value);
 };
 
@@ -577,13 +579,13 @@ exports.isBuffer = function(value) {
  * @param {string} [typeHint] Type hint
  * @return {(Object|Array|Function|string|undefined)}
  */
-exports.canonicalize = function canonicalize(value, stack, typeHint) {
+exports.canonicalize = function canonicalize (value, stack, typeHint) {
   var canonicalizedObj;
   /* eslint-disable no-unused-vars */
   var prop;
   /* eslint-enable no-unused-vars */
   typeHint = typeHint || type(value);
-  function withStack(value, fn) {
+  function withStack (value, fn) {
     stack.push(value);
     fn();
     stack.pop();
@@ -602,8 +604,8 @@ exports.canonicalize = function canonicalize(value, stack, typeHint) {
       canonicalizedObj = value;
       break;
     case 'array':
-      withStack(value, function() {
-        canonicalizedObj = exports.map(value, function(item) {
+      withStack(value, function () {
+        canonicalizedObj = exports.map(value, function (item) {
           return exports.canonicalize(item, stack);
         });
       });
@@ -622,8 +624,8 @@ exports.canonicalize = function canonicalize(value, stack, typeHint) {
     /* falls through */
     case 'object':
       canonicalizedObj = canonicalizedObj || {};
-      withStack(value, function() {
-        exports.forEach(exports.keys(value).sort(), function(key) {
+      withStack(value, function () {
+        exports.forEach(exports.keys(value).sort(), function (key) {
           canonicalizedObj[key] = exports.canonicalize(value[key], stack);
         });
       });
@@ -651,7 +653,7 @@ exports.canonicalize = function canonicalize(value, stack, typeHint) {
  * @param {boolean} recursive Whether or not to recurse into subdirectories.
  * @return {string[]} An array of paths.
  */
-exports.lookupFiles = function lookupFiles(path, extensions, recursive) {
+exports.lookupFiles = function lookupFiles (path, extensions, recursive) {
   var files = [];
   var re = new RegExp('\\.(' + extensions.join('|') + ')$');
 
@@ -677,7 +679,7 @@ exports.lookupFiles = function lookupFiles(path, extensions, recursive) {
     return;
   }
 
-  readdirSync(path).forEach(function(file) {
+  readdirSync(path).forEach(function (file) {
     file = join(path, file);
     try {
       var stat = statSync(file);
@@ -706,7 +708,7 @@ exports.lookupFiles = function lookupFiles(path, extensions, recursive) {
  * @return {Error}
  */
 
-exports.undefinedError = function() {
+exports.undefinedError = function () {
   return new Error('Caught undefined error, did you throw without specifying what?');
 };
 
@@ -717,7 +719,7 @@ exports.undefinedError = function() {
  * @return {Error}
  */
 
-exports.getError = function(err) {
+exports.getError = function (err) {
   return err || exports.undefinedError();
 };
 
@@ -730,7 +732,7 @@ exports.getError = function(err) {
  * (i.e: strip Mocha and internal node functions from stack trace).
  * @returns {Function}
  */
-exports.stackTraceFilter = function() {
+exports.stackTraceFilter = function () {
   // TODO: Replace with `process.browser`
   var is = typeof document === 'undefined' ? { node: true } : { browser: true };
   var slash = path.sep;
@@ -742,26 +744,26 @@ exports.stackTraceFilter = function() {
     slash = '/';
   }
 
-  function isMochaInternal(line) {
-    return (~line.indexOf('node_modules' + slash + 'mocha' + slash))
-      || (~line.indexOf('node_modules' + slash + 'mocha.js'))
-      || (~line.indexOf('bower_components' + slash + 'mocha.js'))
-      || (~line.indexOf(slash + 'mocha.js'));
+  function isMochaInternal (line) {
+    return (~line.indexOf('node_modules' + slash + 'mocha' + slash)) ||
+      (~line.indexOf('node_modules' + slash + 'mocha.js')) ||
+      (~line.indexOf('bower_components' + slash + 'mocha.js')) ||
+      (~line.indexOf(slash + 'mocha.js'));
   }
 
-  function isNodeInternal(line) {
-    return (~line.indexOf('(timers.js:'))
-      || (~line.indexOf('(events.js:'))
-      || (~line.indexOf('(node.js:'))
-      || (~line.indexOf('(module.js:'))
-      || (~line.indexOf('GeneratorFunctionPrototype.next (native)'))
-      || false;
+  function isNodeInternal (line) {
+    return (~line.indexOf('(timers.js:')) ||
+      (~line.indexOf('(events.js:')) ||
+      (~line.indexOf('(node.js:')) ||
+      (~line.indexOf('(module.js:')) ||
+      (~line.indexOf('GeneratorFunctionPrototype.next (native)')) ||
+      false;
   }
 
-  return function(stack) {
+  return function (stack) {
     stack = stack.split('\n');
 
-    stack = reduce(stack, function(list, line) {
+    stack = reduce(stack, function (list, line) {
       if (isMochaInternal(line)) {
         return list;
       }
@@ -789,6 +791,12 @@ exports.stackTraceFilter = function() {
  * @param {*} value
  * @returns {boolean} Whether or not `value` is a Promise
  */
-exports.isPromise = function isPromise(value) {
+exports.isPromise = function isPromise (value) {
   return typeof value === 'object' && typeof value.then === 'function';
 };
+
+/**
+ * It's a noop.
+ * @api
+ */
+exports.noop = function () {};
