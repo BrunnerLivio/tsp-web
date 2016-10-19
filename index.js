@@ -5,7 +5,7 @@ var express = require('express'),
     http = require('http').createServer(app),
     io = require('socket.io').listen(http);
 
-app.set('ipaddr', '127.0.0.1');
+app.set('ipaddr', '0.0.0.0');
 
 app.set('port', 3000);
 
