@@ -1,4 +1,11 @@
 # Editor
 *.log
 .vscode
+# dependencies
 node_modules
+# debian
+debian/debhelper-build-stamp
+debian/files
+debian/tsp-web.*.debhelper
+debian/tsp-web.substvars
+debian/tsp-web/
