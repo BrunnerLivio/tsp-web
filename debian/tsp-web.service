@@ -1,0 +1,16 @@
+[Service]
+WorkingDirectory=/usr/lib/node_modules/tsp-web
+ExecStart=/usr/bin/node /usr/lib/node_modules/tsp-web/index.js
+KillSignal=SIGQUIT
+KillMode=process
+TimeoutStopSec=15s
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=tsp-web
+User=tsp
+Group=tsp
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
