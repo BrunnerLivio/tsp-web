@@ -13,10 +13,10 @@ program
 
 
 var keywords = program.args;
-var log = path.join(os.tmpdir(), 'tsp-monitor');
+var log = path.join(os.tmpdir(), 'tsp-web');
 
 if (program.startup) {
-    startup.create('tsp-monitor', process.execPath, [__dirname], log);
+    startup.create('tsp-web', process.execPath, [__dirname], log);
     console.log('Automaticly registered in startup');
 }
 

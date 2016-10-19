@@ -1,8 +1,8 @@
-# TSP Monitor
+# TSP Web
 
 Displays a overview of the task spooler server of your machine in real time.
 
-![TSP Monitor Preview](http://i.imgur.com/E4baKkp.png)
+![TSP Web Preview](http://i.imgur.com/E4baKkp.png)
 
 
 ## Installation

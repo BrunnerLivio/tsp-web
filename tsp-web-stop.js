@@ -9,15 +9,15 @@ var got = require('got');
 
 program
     .usage('[options]')
-    .option('-s, --startup', 'Remove tsp-monitor from startup')
+    .option('-s, --startup', 'Remove tsp-web from startup')
     .parse(process.argv);
 
 var keywords = program.args;
-var log = path.join(os.tmpdir(), 'tsp-monitor');
+var log = path.join(os.tmpdir(), 'tsp-web');
 
 
 if (program.startup) {
-    startup.remove('tsp-monitor');
+    startup.remove('tsp-web');
     console.log('Removed from startup');
 }
 
