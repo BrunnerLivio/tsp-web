@@ -1,0 +1,17 @@
+Source: tsp-web
+Section: misc
+Priority: optional
+Maintainer: Eric Keller <eric.keller.ek1@roche.com>
+Build-Depends: debhelper (>=9), npm, nodejs, dh-systemd (>= 1.5)
+Standards-Version: 3.9.7
+#Homepage: <insert the upstream URL, if relevant>
+Vcs-Git: ssh://git@stash.intranet.roche.com:7999/repo/tsp-web.git
+Vcs-Browser: https://stash.intranet.roche.com/stash/projects/REPO/repos/tsp-web/browse
+
+Package: tsp-web
+Architecture: all
+Depends: ${misc:Depends}, task-spooler, nodejs, nodejs-legacy
+Description: task-spooler web monitor
+  List all the task-spooler tasks in a nice web interface.
+  Grab the stdout/stderr buffer of the command.
+  Display command return code in the appropriate color.

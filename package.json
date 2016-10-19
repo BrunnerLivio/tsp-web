@@ -1,5 +1,5 @@
 {
-  "name": "tsp-monitor",
+  "name": "tsp-web",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@stash.intranet.roche.com:7999/~brunnel6/tsp-monitor.git"
+    "url": "ssh://git@stash.intranet.roche.com:7999/repo/tsp-web.git"
   },
   "keywords": [
     "tsp",
