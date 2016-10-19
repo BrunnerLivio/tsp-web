@@ -1,3 +1,4 @@
 # Editor
 *.log
 .vscode
+node_modules
