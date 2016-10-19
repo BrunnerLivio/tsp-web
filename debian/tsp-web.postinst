@@ -25,6 +25,7 @@ case "$1" in
         chown :tsp /tsp/tsp-web.socket
         cat << EOF > /etc/profile.d/tsp-web.sh
 export TS_SOCKET=/tsp/tsp-web.socket
+export TMPDIR=/tsp/
 EOF
         chmod +r /etc/profile.d/tsp-web.sh
     ;;
