@@ -12,6 +12,7 @@ Displays a overview of the task spooler server of your machine in real time.
 1. Install NodeJS
 1. Run `sudo npm install -g tsp-monitor`
 1. To start the server and set to startup `tsp-monitor start --startup`
+
 ### Development
 
 1. Install NodeJS
