@@ -49,10 +49,10 @@ describe('File Livestreamer', function () {
                         setTimeout(function () {
                             expect(counter).to.equal(2);
                             done();
-                        }, 10);
+                        }, 30);
                     });
-                }, 10);
-            }, 10);
+                }, 30);
+            }, 30);
 
 
         });
