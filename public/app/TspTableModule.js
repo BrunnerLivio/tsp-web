@@ -105,7 +105,13 @@ var TspTableModule = (function (socket, FileStreamModule) {
         }
         html += '<td>' + row.State + '</td>';
         html += '<td>' + row.Times + '</td>';
-        html += '<td><i class="material-icons md-36 remove-task hint--bottom" aria-label="Remove Task" onclick="TspTableModule.removeTask(' + row.ID + ', event)">delete</i></td>';
+        if (row.State === 'running') {
+            html += '<td><i class="material-icons md-36 remove-task hint--bottom" aria-label="Kill/Stop Task" onclick="TspTableModule.removeTask(' + row.ID + ', event)">cancel</i></td>';
+        } else if (row.State === 'finished') {
+            html += '<td><i class="material-icons md-36 remove-task hint--bottom" aria-label="Remove Task" onclick="TspTableModule.removeTask(' + row.ID + ', event)">delete</i></td>';
+        } else {
+            html += '<td></td>';
+        }
         return html;
 
     }
