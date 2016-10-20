@@ -1,7 +1,8 @@
 "use strict";
 
 var spawn = require('child_process').spawn,
-    fs = require('fs');
+    fs = require('fs'),
+    chalk = require('chalk');
 /**
  * @module FileLivestreamer
  * @description
@@ -22,11 +23,28 @@ function FileLivestreamer(fileName) {
      * @memberOf fileLivestreamer
      * 
      * @param {requestCallback} promise The promise which gets called, whenever an update occurs
+     * @param {requestCallback} errorPromise The promise which gets called, whenever an error occurs
      * 
      * @returns {Object} A collection of public possible methods
      */
     function subscribe(promise) {
         self.promise = promise;
+        return methods;
+    }
+
+    /**
+     * @name subscribe
+     * @description
+     * Subscribe to errors
+     * 
+     * @memberOf fileLivestreamer
+     * 
+     * @param {requestCallback} errorPromise The promise which gets called, whenever an error occurs
+     * 
+     * @returns {Object} A collection of public possible methods
+     */
+    function onError(errorPromise) {
+        self.errorPromise = errorPromise;
         return methods;
     }
 
@@ -41,7 +59,10 @@ function FileLivestreamer(fileName) {
     function pushFileContent() {
         fs.readFile(self.fileName, 'utf8', function (err, data) {
             if (err) {
-                return console.log(err);
+                console.log(chalk.cyan('[Core] '), chalk.red(err));
+                if (self.errorPromise) {
+                    self.errorPromise(err);
+                }
             }
             if (self.promise !== undefined) {
                 self.promise(data);
@@ -89,7 +110,8 @@ function FileLivestreamer(fileName) {
     var methods = {
         subscribe: subscribe,
         watch: watch,
-        stop: stop
+        stop: stop,
+        onError: onError
     };
 
     return methods;

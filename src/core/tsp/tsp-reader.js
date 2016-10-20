@@ -1,7 +1,8 @@
 "use strict";
 
 var spawn = require('child_process').spawn,
-    shellParser = require('node-shell-parser');
+    shellParser = require('node-shell-parser'),
+    chalk = require('chalk');
 
 /**
  * @module tspReader
@@ -14,7 +15,8 @@ function tspReader() {
     var promise,
         tsp,
         shellOutput = '',
-        intervalId;
+        intervalId,
+        errorPromise;
 
     /**
      * @name subscribe
@@ -29,6 +31,22 @@ function tspReader() {
      */
     function subscribe(_promise) {
         promise = _promise;
+        return methods;
+    }
+
+    /**
+     * @name error
+     * @description
+     * Subscribe to errors
+     * 
+     * @memberOf tspReader
+     * 
+     * @param {requestCallback} _errorPromise The promise which gets called, whenever an error occurs
+     * 
+     * @returns {Object} A collection of public possible methods
+     */
+    function onError(_errorPromise) {
+        errorPromise = _errorPromise;
         return methods;
     }
 
@@ -83,6 +101,13 @@ function tspReader() {
             }
         });
 
+        tsp.stderr.on('data', function (data) {
+            console.log(chalk.cyan('[Core] '), chalk.red(data));
+            if (errorPromise) {
+                errorPromise(data);
+            }
+        });
+
         return methods;
     }
 
@@ -107,7 +132,8 @@ function tspReader() {
         subscribe: subscribe,
         watch: watch,
         run: run,
-        stop: stop
+        stop: stop,
+        onError: onError
     };
 
     return methods;
