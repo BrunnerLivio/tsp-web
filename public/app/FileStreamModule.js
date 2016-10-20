@@ -20,7 +20,9 @@ var FileStreamModule = (function (socket) {
         $content = $fileStreamDialog.find('.content');
         $fileStreamDialogShadow.click(function () {
             $fileStreamDialog.fadeOut();
-            $fileStreamDialogShadow.fadeOut();
+            $fileStreamDialogShadow.fadeOut(function() {
+                $content.html('');
+            });
         });
     }
 

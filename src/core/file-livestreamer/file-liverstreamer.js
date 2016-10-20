@@ -1,7 +1,8 @@
 "use strict";
 
 var spawn = require('child_process').spawn,
-    fs = require('fs');
+    fs = require('fs'),
+    chalk = require('chalk');
 /**
  * @module FileLivestreamer
  * @description
@@ -22,11 +23,28 @@ function FileLivestreamer(fileName) {
      * @memberOf fileLivestreamer
      * 
      * @param {requestCallback} promise The promise which gets called, whenever an update occurs
+     * @param {requestCallback} errorPromise The promise which gets called, whenever an error occurs
      * 
      * @returns {Object} A collection of public possible methods
      */
     function subscribe(promise) {
         self.promise = promise;
+        return methods;
+    }
+
+    /**
+     * @name subscribe
+     * @description
+     * Subscribe to errors
+     * 
+     * @memberOf fileLivestreamer
+     * 
+     * @param {requestCallback} errorPromise The promise which gets called, whenever an error occurs
+     * 
+     * @returns {Object} A collection of public possible methods
+     */
+    function onError(errorPromise) {
+        self.errorPromise = errorPromise;
         return methods;
     }
 
@@ -41,9 +59,11 @@ function FileLivestreamer(fileName) {
     function pushFileContent() {
         fs.readFile(self.fileName, 'utf8', function (err, data) {
             if (err) {
-                return console.log(err);
-            }
-            if (self.promise !== undefined) {
+                console.log(chalk.cyan('[Core] '), chalk.red(err));
+                if (self.errorPromise) {
+                    self.errorPromise(err);
+                }
+            } else if (self.promise !== undefined) {
                 self.promise(data);
             }
         });
@@ -63,10 +83,25 @@ function FileLivestreamer(fileName) {
      * @returns {Object} A collection of public possible methods
      */
     function watch() {
+        if (!fs.existsSync(self.fileName)) {
+            console.log(chalk.cyan('[Core] ') + chalk.red('Could not watch file ' + self.fileName + ' because it  does not exist'));
+            if (self.errorPromise) {
+                self.errorPromise({
+                    message: 'Could not watch file ' + self.fileName + ' because it  does not exist'
+                });
+            }
+            return methods;
+        }
         pushFileContent();
-        self.watcher = fs.watch(self.fileName, function (curr, prev) {
-            pushFileContent();
-        });
+        try {
+            self.watcher = fs.watch(self.fileName, function (curr, prev) {
+                pushFileContent();
+            });
+        } catch (err) {
+            console.log(chalk.cyan('[Core] ') + chalk.red(err.message));
+            self.errorPromise(err);
+            return methods;
+        }
         return methods;
     }
 
@@ -89,7 +124,8 @@ function FileLivestreamer(fileName) {
     var methods = {
         subscribe: subscribe,
         watch: watch,
-        stop: stop
+        stop: stop,
+        onError: onError
     };
 
     return methods;

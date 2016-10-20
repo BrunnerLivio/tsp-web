@@ -9,6 +9,12 @@ module.exports = function (socket, io) {
         .subscribe(function (data) {
             io.sockets.emit('newTspData', data);
         })
+        .onError(function(data){
+            io.sockets.emit('error', {
+                error: data,
+                type: 'TSPReaderException'
+            });
+        })
         .watch();
 
     socket.on('disconnect', function () {

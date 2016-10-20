@@ -6,11 +6,18 @@ module.exports = function (socket, io) {
 
     var clientId = socket.id,
         fileStreamer;
-        
+
     socket.on('startFilestream', function (fileName) {
         fileStreamer = fileLivestreamer(fileName)
             .subscribe(function (data) {
                 io.to(clientId).emit('fileChanged', data);
+            })
+            .onError(function (data) {
+                io.to(clientId).emit('error', {
+                    error: data,
+                    message: data.message,
+                    type: 'FilestreamException'
+                });
             })
             .watch();
     });

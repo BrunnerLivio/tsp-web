@@ -32,6 +32,7 @@
     "path": "^0.12.7",
     "socket.io": "^1.4.8",
     "tablesorter": "^2.27.8",
+    "toastr": "^2.1.2",
     "user-startup": "^0.2.2"
   },
   "devDependencies": {

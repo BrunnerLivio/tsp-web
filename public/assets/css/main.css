@@ -139,3 +139,7 @@ a {
     color: #616161;
     cursor: pointer;
 }
+
+.toast>.toast-message {
+    font-family: 'Roboto';
+}

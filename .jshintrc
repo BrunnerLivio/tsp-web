@@ -5,7 +5,8 @@
         "io": false,
         "confirm": false,
         "Socket": false,
-        "FileStreamModule": false
+        "FileStreamModule": false,
+        "toastr": false
     },
     "browser": true,
     "expr": true,
