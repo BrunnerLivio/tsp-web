@@ -2,7 +2,8 @@
 
 var spawn = require('child_process').spawn,
     shellParser = require('node-shell-parser'),
-    chalk = require('chalk');
+    chalk = require('chalk'),
+    _ = require('lodash');
 
 /**
  * @module tspReader
@@ -16,7 +17,8 @@ function tspReader() {
         tsp,
         shellOutput = '',
         intervalId,
-        errorPromise;
+        errorPromise,
+        lastTasks;
 
     /**
      * @name subscribe
@@ -110,7 +112,7 @@ function tspReader() {
      */
     function getTaskById(id, _promise) {
         getTasks(function (tasks) {
-            _promise(tasks.filter(function(task){
+            _promise(tasks.filter(function (task) {
                 return parseInt(task.ID) === id;
             })[0]);
         });
@@ -131,7 +133,10 @@ function tspReader() {
      */
     function run() {
         getTasks(function (tasks) {
-            promise(tasks);
+            if (!_.isEqual(lastTasks, tasks)) {
+                lastTasks = tasks;
+                promise(tasks);
+            }
         });
 
         return methods;
