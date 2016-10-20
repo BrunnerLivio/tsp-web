@@ -19,10 +19,27 @@ var FileStreamModule = (function (socket) {
         $fileStreamDialogShadow = $('#fileStreamDialogShadow');
         $content = $fileStreamDialog.find('.content');
         $fileStreamDialogShadow.click(function () {
-            $fileStreamDialog.fadeOut();
-            $fileStreamDialogShadow.fadeOut(function() {
-                $content.html('');
-            });
+            closeDialog();
+        });
+
+        $(document).keydown(function (e) {
+            var code = e.keyCode || e.which;
+            // Press escape
+            if (code === 27) {
+                closeDialog();
+            }
+        });
+    }
+
+    /**
+     * @name closeDialog
+     * @description
+     * Closes the dialog and clears its content
+     */
+    function closeDialog() {
+        $fileStreamDialog.fadeOut();
+        $fileStreamDialogShadow.fadeOut(function () {
+            $content.html('');
         });
     }
 
