@@ -71,18 +71,7 @@ function tspReader() {
         return methods;
     }
 
-    /**
-     * @name run
-     * 
-     * @description
-     * Reads the tsp data, parses it and pushes it to
-     * the subscribers
-     * 
-     * @memberOf tspReader
-     * 
-     * @returns {Object} A collection of public possible methods
-     */
-    function run() {
+    function getTasks(_promise) {
         tsp = spawn('tsp');
         shellOutput = '';
 
@@ -96,8 +85,8 @@ function tspReader() {
 
 
         tsp.stdout.on('end', function () {
-            if (promise) {
-                promise(shellParser(shellOutput));
+            if (_promise) {
+                _promise(shellParser(shellOutput));
             }
         });
 
@@ -106,6 +95,43 @@ function tspReader() {
             if (errorPromise) {
                 errorPromise(data);
             }
+        });
+    }
+
+    /**
+     * @name getTaskById
+     * 
+     * @description
+     * Returns a tsp task object by id
+     * 
+     * @memberOf tspReader
+     * 
+     * @returns {Object} A collection of public possible methods
+     */
+    function getTaskById(id, _promise) {
+        getTasks(function (tasks) {
+            _promise(tasks.filter(function(task){
+                return parseInt(task.ID) === id;
+            })[0]);
+        });
+
+        return methods;
+    }
+
+    /**
+     * @name run
+     * 
+     * @description
+     * Reads the tsp data, parses it and pushes it to
+     * the subscribers
+     * 
+     * @memberOf tspReader
+     * 
+     * @returns {Object} A collection of public possible methods
+     */
+    function run() {
+        getTasks(function (tasks) {
+            promise(tasks);
         });
 
         return methods;
@@ -133,7 +159,8 @@ function tspReader() {
         watch: watch,
         run: run,
         stop: stop,
-        onError: onError
+        onError: onError,
+        getTaskById: getTaskById
     };
 
     return methods;
