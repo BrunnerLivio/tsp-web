@@ -97,7 +97,11 @@ var TspTableModule = (function (socket, FileStreamModule) {
         html += '<tr>';
         html += '<td>' + row.ID + '</td>';
         html += '<td>' + row.Command + '</td>';
-        html += '<td class="' + (row.ELevel < 0 ? 'state-failed' : 'state-successful') + '">' + row.ELevel + '</td>';
+        if (row.ELevel !== '') {
+            html += '<td class="' + (row.ELevel < 0 ? 'state-failed' : 'state-successful') + '">' + row.ELevel + '</td>';
+        } else {
+            html += '<td>' + row.ELevel + '</td>';
+        }
         if (row.Output !== '(file)') {
             html += '<td><a onclick="FileStreamModule.openDialog(\'' + row.Output + '\')" href="#">' + row.Output + '</a></td>';
         } else {
