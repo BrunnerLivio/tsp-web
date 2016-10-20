@@ -28,6 +28,21 @@ export TS_SOCKET=/tsp/tsp-web.socket
 export TMPDIR=/tsp/
 EOF
         chmod +r /etc/profile.d/tsp-web.sh
+        # setup incron as a workaround for TMPDIR
+        echo root > /etc/incron.allow
+        cat << 'EOF' > /var/spool/incron/root
+/tmp IN_CREATE /usr/local/bin/tsp_ownership.sh $@/$#
+EOF
+        chown :incron /var/spool/incron/root
+        cat << 'EOF' > /usr/local/bin/tsp_ownership.sh
+#!/bin/sh
+
+CREATED_FILE=${1}
+echo ${CREATED_FILE} | grep -q ".*ts-out[.].*" || exit 0
+chmod 640  /tmp/ts-out.*
+chown :tsp /tmp/ts-out.*
+EOF
+        chmod +x /usr/local/bin/tsp_ownership.sh
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
