@@ -19,7 +19,7 @@ describe('TSPReader', function () {
                     .subscribe(function (data) {
                         expect(data.length).to.equal(1);
                         expect(data[0].ID).to.equal('0');
-                        expect(data[0].Command).to.equal('[test]ls');
+                        expect(data[0].Command).to.equal('ls');
                         expect(data[0].State).to.equal('finished');
                         expect(data[0].ELevel).to.equal('0');
                         tspReader.stop();
