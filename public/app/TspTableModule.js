@@ -103,7 +103,7 @@ var TspTableModule = (function (socket, FileStreamModule) {
             html += '<td>' + row.ELevel + '</td>';
         }
         if (row.Output !== '(file)') {
-            html += '<td><a onclick="FileStreamModule.openDialog(\'' + row.Output + '\')" href="#">' + row.Output + '</a></td>';
+            html += '<td><a class="hint--bottom" aria-label="' + row.Output + '" onclick="FileStreamModule.openDialog(\'' + row.Output + '\')" href="#">Output</a></td>';
         } else {
             html += '<td>' + row.Output + '</td>';
         }
