@@ -6,6 +6,8 @@ var TspTableModule = (function (socket, FileStreamModule) {
         $tbody,
         $tr;
 
+    self.search = {};
+
     $(document).ready(init);
 
     /**
@@ -37,6 +39,7 @@ var TspTableModule = (function (socket, FileStreamModule) {
      */
     function onNewTspData(data) {
         self.data = data;
+        console.log("ASD");
         sort();
     }
 
@@ -60,7 +63,9 @@ var TspTableModule = (function (socket, FileStreamModule) {
             }
         }
 
-        self.data.sort(function (a, b) {
+        var displayData = self.data;
+
+        displayData.sort(function (a, b) {
             var reA = /[^a-zA-Z]/g;
             var reN = /[^0-9]/g;
             var aA = a[property].replace(reA, '');
@@ -80,7 +85,24 @@ var TspTableModule = (function (socket, FileStreamModule) {
                 return returnVal;
             }
         });
-        render();
+
+        displayData = self.data.filter(function (item) {
+            var found = true;
+            Object.keys(self.search).forEach(function (key) {
+                if(item[key].toString().indexOf(self.search[key]) === -1){
+                    found = false;
+                }
+            });
+            console.log(found);
+            return found;
+        });
+
+        render(displayData);
+    }
+
+    function search(value, property) {
+        self.search[property] = value;
+        sort();
     }
 
     /**
@@ -96,7 +118,7 @@ var TspTableModule = (function (socket, FileStreamModule) {
         var html = '';
         html += '<tr>';
         html += '<td>' + row.ID + '</td>';
-        html += '<td>' + row.Command + '</td>';
+        html += '<td><span class="hint--bottom" aria-label="' + row.Command + '">' + row.Label + '</span></td>';
         if (row.ELevel !== '') {
             html += '<td class="' + (row.ELevel < 0 ? 'state-failed' : 'state-successful') + '">' + row.ELevel + '</td>';
         } else {
@@ -124,10 +146,12 @@ var TspTableModule = (function (socket, FileStreamModule) {
      * @name render
      * @description
      * Renders the tsp table rows.
+     * 
+     * @param {Object} displayData The data which should get rendered
      */
-    function render() {
+    function render(displayData) {
         $('#tspTable tbody tr').remove();
-        self.data.forEach(function (row) {
+        displayData.forEach(function (row) {
             $tbody.append(getHTMLByRow(row));
         });
     }
@@ -180,6 +204,7 @@ var TspTableModule = (function (socket, FileStreamModule) {
         sort: sort,
         render: render,
         removeTask: removeTask,
-        killAllTasks: killAllTasks
+        killAllTasks: killAllTasks,
+        search: search
     };
 })(Socket, FileStreamModule);
