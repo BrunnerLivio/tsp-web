@@ -3,7 +3,8 @@
 var express = require('express'),
     app = express(),
     http = require('http').createServer(app),
-    io = require('socket.io').listen(http);
+    io = require('socket.io').listen(http),
+    chalk = require('chalk');
 
 app.set('ipaddr', '0.0.0.0');
 
@@ -23,12 +24,22 @@ app.use('/assets', express.static(__dirname + '/public/assets'));
 require('./src/api/controllers/task')(app);
 
 
-http.listen(app.get('port'), app.get('ipaddr'), function () {
-    console.log('Server up and running. Go to http://' + app.get('ipaddr') + ':' + app.get('port'));
+var server = http.listen(app.get('port'), app.get('ipaddr'), function () {
+    console.log(chalk.cyan('[Server] ') + 'Up and running. Go to ' + chalk.blue('http://' + app.get('ipaddr') + ':' + app.get('port')));
 });
+
+server.on('error', function (err) {
+    console.log(chalk.cyan('[Server] ') + chalk.red(err));
+});
+
 
 io.on('connection', function (socket) {
     // === Websocket Controllers ===
     require('./src/api/controllers/filestream')(socket, io);
     require('./src/api/controllers/tsp')(socket, io);
+
+    console.log(chalk.cyan('[Websocket] ') + 'New user connected (' + socket.handshake.address + ')');
+    socket.on('error', function (err) {
+        console.log(chalk.cyan('[Websocket]'), chalk.red(err));
+    });
 });
