@@ -1,7 +1,8 @@
 "use strict";
 
 var spawn = require('child_process').spawn;
-
+var tspReader = require('./tsp-reader');
+var process = require('process');
 /**
  * @module tspTask
  * @description 
@@ -10,8 +11,6 @@ var spawn = require('child_process').spawn;
  * @returns {Object} A collection of public possible methods
  */
 function tspTask() {
-
-    var tsp;
 
     /**
      * @name remove
@@ -23,7 +22,23 @@ function tspTask() {
      * @memberOf tspTask
      */
     function remove(id) {
-        tsp = spawn('tsp', ['-r', id]);
+        tspReader().getTaskById(parseInt(id), function (task) {
+            if (task.State === 'finished') {
+                spawn('tsp', ['-r', id]);
+            } else {
+                var tsp = spawn('tsp', ['-p', id]);
+                tsp.stdout.on('data', function (data) {
+                    // Uint8array to string
+                    var pid = "";
+                    for (var i = 0; i < data.byteLength; i++) {
+                        pid += String.fromCharCode(data[i]);
+                    }
+                    pid = parseInt(pid.replace('\n', ''));
+
+                    process.kill(pid);
+                });
+            }
+        });
     }
 
     /**
@@ -34,7 +49,7 @@ function tspTask() {
      * @memberOf tspTask
      */
     function killAll() {
-        tsp = spawn('tsp', ['-K']);
+        spawn('tsp', ['-K']);
     }
 
     var methods = {
