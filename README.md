@@ -26,4 +26,6 @@ In order to create a Debian package you have to:
 1. Install package dependencies `sudo apt update && sudo apt install -y build-essential fakeroot devscripts`
 1. In the root directory of this project call `debuild -uc -us`
 1. Install your Debian package `sudo dpkg -i ../tsp-web*.deb`
+1. add your user to the tsp group `sudo usermod -aG tsp $USER`
+1. Log out and log back in. This ensures your user is running with the correct permissions.
 
