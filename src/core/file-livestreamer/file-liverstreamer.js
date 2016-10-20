@@ -63,8 +63,7 @@ function FileLivestreamer(fileName) {
                 if (self.errorPromise) {
                     self.errorPromise(err);
                 }
-            }
-            if (self.promise !== undefined) {
+            } else if (self.promise !== undefined) {
                 self.promise(data);
             }
         });
@@ -84,10 +83,25 @@ function FileLivestreamer(fileName) {
      * @returns {Object} A collection of public possible methods
      */
     function watch() {
+        if (!fs.existsSync(self.fileName)) {
+            console.log(chalk.cyan('[Core] ') + chalk.red('Could not watch file ' + self.fileName + ' because it  does not exist'));
+            if (self.errorPromise) {
+                self.errorPromise({
+                    message: 'Could not watch file ' + self.fileName + ' because it  does not exist'
+                });
+            }
+            return methods;
+        }
         pushFileContent();
-        self.watcher = fs.watch(self.fileName, function (curr, prev) {
-            pushFileContent();
-        });
+        try {
+            self.watcher = fs.watch(self.fileName, function (curr, prev) {
+                pushFileContent();
+            });
+        } catch (err) {
+            console.log(chalk.cyan('[Core] ') + chalk.red(err.message));
+            self.errorPromise(err);
+            return methods;
+        }
         return methods;
     }
 

@@ -30,6 +30,7 @@ var server = http.listen(app.get('port'), app.get('ipaddr'), function () {
 
 server.on('error', function (err) {
     console.log(chalk.cyan('[Server] ') + chalk.red(err));
+
 });
 
 
