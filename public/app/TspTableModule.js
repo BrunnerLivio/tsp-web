@@ -118,7 +118,7 @@ var TspTableModule = (function (socket, FileStreamModule) {
         var html = '';
         html += '<tr>';
         html += '<td>' + row.ID + '</td>';
-        html += '<td>' + row.Command + '</td>';
+        html += '<td><span class="hint--bottom" aria-label="' + row.Command + '">' + row.Label + '</span></td>';
         if (row.ELevel !== '') {
             html += '<td class="' + (row.ELevel < 0 ? 'state-failed' : 'state-successful') + '">' + row.ELevel + '</td>';
         } else {

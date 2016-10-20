@@ -87,8 +87,18 @@ function tspReader() {
 
 
         tsp.stdout.on('end', function () {
+            var output = shellParser(shellOutput);
+            output.forEach(function (item) {
+                if (item.Command.indexOf('[') !== -1) {
+                    var split = item.Command.split(/\[(.+\w)\]/g);
+                    item.Label = split[1];
+                    item.Command = split[2];
+                } else {
+                    item.Label = item.Command;
+                }
+            });
             if (_promise) {
-                _promise(shellParser(shellOutput));
+                _promise(output);
             }
         });
 
