@@ -18,6 +18,7 @@ case "$1" in
     install|upgrade)
     # create tsp user
     grep -qa tsp /etc/passwd || useradd --home-dir /tsp --create-home --system --shell /bin/sh --user-group tsp
+    chmod -R 770 /tsp
     ;;
 
     abort-upgrade)
