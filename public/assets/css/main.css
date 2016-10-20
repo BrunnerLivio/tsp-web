@@ -83,16 +83,12 @@ tr:not(#header):hover {
     background: #eeeeee;
 }
 
-.state-finished {
+.state-successful {
     background-color: #66bb6a;
 }
 
-.state-running {
-    background-color: #64b5f6;
-}
-
-.state-queued {
-    background-color: #fff176;
+.state-failed {
+    background-color: #f44336;
 }
 
 .dialog-shadow {
