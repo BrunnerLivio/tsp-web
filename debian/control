@@ -10,7 +10,7 @@ Vcs-Browser: https://stash.intranet.roche.com/stash/projects/REPO/repos/tsp-web/
 
 Package: tsp-web
 Architecture: all
-Depends: ${misc:Depends}, task-spooler, nodejs, nodejs-legacy
+Depends: ${misc:Depends}, task-spooler, nodejs, nodejs-legacy, incron
 Description: task-spooler web monitor
   List all the task-spooler tasks in a nice web interface.
   Grab the stdout/stderr buffer of the command.

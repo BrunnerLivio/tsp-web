@@ -24,6 +24,10 @@ case "$1" in
         grep -qa tsp /etc/passwd && userdel --remove --force tsp
         grep -qa tsp /etc/group && delgroup tsp
         test -e /etc/profile.d/tsp-web.sh && rm -f /etc/profile.d/tsp-web.sh
+        # incron workaround TMPDIR
+        test -e /etc/incron.allow && rm -f /etc/incron.allow
+        test -e /var/spool/incron/root && rm -f /var/spool/incron/root
+        test -e /usr/local/bin/tsp_ownership.sh && rm -f /usr/local/bin/tsp_ownership.sh
     ;;
 
     *)
