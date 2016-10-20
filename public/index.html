@@ -2,49 +2,68 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>TSP Web</title>
-    <script src="node_modules/socket.io-client/socket.io.js"></script>
-    <script src="node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="node_modules/toastr/build/toastr.min.js"></script>
-    <script src="app/SocketFactory.js"></script>
-    <script src="app/FileStreamModule.js"></script>
-    <script src="app/TspTableModule.js"></script>
-    <script src="app/ErrorHandlerModule.js"></script>
+	<meta charset="UTF-8">
+	<title>TSP Web</title>
+	<script src="node_modules/socket.io-client/socket.io.js"></script>
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="node_modules/toastr/build/toastr.min.js"></script>
+	<script src="app/SocketFactory.js"></script>
+	<script src="app/FileStreamModule.js"></script>
+	<script src="app/TspTableModule.js"></script>
+	<script src="app/ErrorHandlerModule.js"></script>
 
-    <link rel="stylesheet" href="node_modules/hint.css/hint.min.css">
-    <link rel="stylesheet" href="node_modules/toastr/build/toastr.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="node_modules/hint.css/hint.min.css">
+	<link rel="stylesheet" href="node_modules/toastr/build/toastr.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/main.css">
 </head>
 
 <body>
-    <div class="card">
-        <h2> TSP Web </h2>
-        <table id="tspTable">
-            <thead>
-                <tr>
-                    <th onclick="TspTableModule.sort('ID');">ID</th>
-                    <th onclick="TspTableModule.sort('Command');">Command</th>
-                    <th onclick="TspTableModule.sort('ELevel');">E-Level</th>
-                    <th onclick="TspTableModule.sort('Output');">Output</th>
-                    <th onclick="TspTableModule.sort('State');">State</th>
-                    <th onclick="TspTableModule.sort('Times');">Times(r/u/s)</th>
+	<div class="card">
+		<h2> TSP Web </h2>
+		<table id="tspTable">
+			<thead>
+				<tr>
+					<th onclick="TspTableModule.sort('ID');">ID</th>
+					<th onclick="TspTableModule.sort('Command');">Command</th>
+					<th onclick="TspTableModule.sort('ELevel');">E-Level</th>
+					<th onclick="TspTableModule.sort('Output');">Output</th>
+					<th onclick="TspTableModule.sort('State');">State</th>
+					<th onclick="TspTableModule.sort('Times');">Times(r/u/s)</th>
+					<th>
+						<i class="material-icons md-36 remove-task hint--bottom" aria-label="Kill all tasks" onclick="TspTableModule.killAllTasks()">delete</i>
+					</th>
+				</tr>
+				<tr class="search-row">
+					<th>
+						<input type="search" onkeyup="TspTableModule.search(this.value, 'ID')" />
+					</th>
+					<th>
+						<input type="search" onkeyup="TspTableModule.search(this.value, 'Command')" />
+					</th>
+					<th>
+						<input type="search" onkeyup="TspTableModule.search(this.value, 'ELevel')" />
+					</th>
+					<th></th>
+					<th>
+						<input type="search" onkeyup="TspTableModule.search(this.value, 'State')" />
+					</th>
                     <th>
-                        <i class="material-icons md-36 remove-task hint--bottom" aria-label="Kill all tasks" onclick="TspTableModule.killAllTasks()">delete</i>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-    <div class="dialog-shadow" id="fileStreamDialogShadow"></div>
-    <div class="dialog" id="fileStreamDialog">
-        <h2> Filestream</h2>
-        <div class="content">
-        </div>
-    </div>
+						<input type="search" onkeyup="TspTableModule.search(this.value, 'Times')" />
+					</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+	<div class="dialog-shadow" id="fileStreamDialogShadow"></div>
+	<div class="dialog" id="fileStreamDialog">
+		<h2> Filestream</h2>
+		<div class="content">
+		</div>
+	</div>
 </body>
 
 </html>
