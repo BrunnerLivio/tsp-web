@@ -2,7 +2,7 @@
 
 Displays a overview of the task spooler server of your machine in real time.
 
-![TSP Web Preview](http://i.imgur.com/E4baKkp.png)
+![TSP Web Preview](http://i.imgur.com/5TL7OeP.jpg)
 
 
 ## Installation
