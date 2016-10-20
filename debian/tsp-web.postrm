@@ -21,8 +21,9 @@ set -e
 
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
-        userdel --remove --force tsp
-        rm -f /etc/profile.d/tsp-web.sh
+        grep -qa tsp /etc/passwd && userdel --remove --force tsp
+        grep -qa tsp /etc/group && delgroup tsp
+        test -e /etc/profile.d/tsp-web.sh && rm -f /etc/profile.d/tsp-web.sh
     ;;
 
     *)
