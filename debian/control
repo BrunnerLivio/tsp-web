@@ -5,8 +5,8 @@ Maintainer: Eric Keller <eric.keller.ek1@roche.com>
 Build-Depends: debhelper (>=9), npm, nodejs, dh-systemd (>= 1.5)
 Standards-Version: 3.9.7
 #Homepage: <insert the upstream URL, if relevant>
-Vcs-Git: ssh://git@stash.intranet.roche.com:7999/repo/tsp-web.git
-Vcs-Browser: https://stash.intranet.roche.com/stash/projects/REPO/repos/tsp-web/browse
+Vcs-Git: ssh://git@github.com:Roche/tsp-web.git
+Vcs-Browser: https://github.com/Roche/tsp-web
 
 Package: tsp-web
 Architecture: all
