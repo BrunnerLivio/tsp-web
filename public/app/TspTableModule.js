@@ -120,7 +120,7 @@ var TspTableModule = (function (socket, FileStreamModule) {
         html += '<td>' + row.ID + '</td>';
         html += '<td><span class="hint--bottom" aria-label="' + row.Command + '">' + row.Label + '</span></td>';
         if (row.ELevel !== '') {
-            html += '<td class="' + (row.ELevel < 0 ? 'state-failed' : 'state-successful') + '">' + row.ELevel + '</td>';
+            html += '<td class="' + (row.ELevel != 0 ? 'state-failed' : 'state-successful') + '">' + row.ELevel + '</td>';
         } else {
             html += '<td>' + row.ELevel + '</td>';
         }
