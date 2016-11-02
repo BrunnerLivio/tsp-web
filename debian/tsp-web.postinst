@@ -16,18 +16,33 @@ set -e
 #          <conflicting-package> <version>
 # for details, see https://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
+TSP_USER=tsp
+TSP_GROUP=tsp
+TSP_HOME=/tsp
 
+add_user_and_group()
+{
+if ! getent group ${TSP_GROUP} >/dev/null; then
+    addgroup --system ${TSP_GROUP}
+fi
+if ! getent passwd ${TSP_USER} >/dev/null; then
+    adduser --system ${TSP_USER} --home ${TSP_HOME} --shell /bin/false --ingroup ${TSP_GROUP}
+fi
+chown -R ${TSP_USER}:${TSP_GROUP} ${TSP_HOME}
+chmod -R 770 ${TSP_HOME}
+}
 
 case "$1" in
     configure)
-        TS_SOCKET=/tsp/tsp-web.socket tsp -l
+        add_user_and_group
+        TS_SOCKET=${TSP_HOME}/tsp-web.socket tsp -l
         INCRON_ALLOW=/etc/incron.allow
         SPOOL_INCRON=/var/spool/incron/root
-        chmod g+rw /tsp/tsp-web.socket
-        chown :tsp /tsp/tsp-web.socket
+        chmod g+rw ${TSP_HOME}/tsp-web.socket
+        chown :${TSP_GROUP} ${TSP_HOME}/tsp-web.socket
         cat << EOF > /etc/profile.d/tsp-web.sh
-export TS_SOCKET=/tsp/tsp-web.socket
-export TMPDIR=/tsp/
+export TS_SOCKET=${TSP_HOME}/tsp-web.socket
+export TMPDIR=${TSP_HOME}
 EOF
         chmod +r /etc/profile.d/tsp-web.sh
         # setup incron as a workaround for TMPDIR
