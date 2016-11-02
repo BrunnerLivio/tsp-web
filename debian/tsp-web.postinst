@@ -21,6 +21,8 @@ set -e
 case "$1" in
     configure)
         TS_SOCKET=/tsp/tsp-web.socket tsp -l
+        INCRON_ALLOW=/etc/incron.allow
+        SPOOL_INCRON=/var/spool/incron/root
         chmod g+rw /tsp/tsp-web.socket
         chown :tsp /tsp/tsp-web.socket
         cat << EOF > /etc/profile.d/tsp-web.sh
@@ -29,11 +31,11 @@ export TMPDIR=/tsp/
 EOF
         chmod +r /etc/profile.d/tsp-web.sh
         # setup incron as a workaround for TMPDIR
-        grep -qa root /etc/incron.allow || echo root >> /etc/incron.allow
-        cat << 'EOF' > /var/spool/incron/root
+        test -e ${INCRON_ALLOW} && grep -qa root ${INCRON_ALLOW} || echo root >> ${INCRON_ALLOW}
+        test -e ${SPOOL_INCRON} && grep -qa tsp_ownership.sh ${SPOOL_INCRON} || cat << 'EOF' >> ${SPOOL_INCRON}
 /tmp IN_CREATE /usr/local/bin/tsp_ownership.sh $@/$#
 EOF
-        chown :incron /var/spool/incron/root
+        chown :incron ${SPOOL_INCRON}
         cat << 'EOF' > /usr/local/bin/tsp_ownership.sh
 #!/bin/sh
 
