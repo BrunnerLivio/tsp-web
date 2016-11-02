@@ -29,7 +29,7 @@ export TMPDIR=/tsp/
 EOF
         chmod +r /etc/profile.d/tsp-web.sh
         # setup incron as a workaround for TMPDIR
-        echo root > /etc/incron.allow
+        grep -qa root /etc/incron.allow || echo root >> /etc/incron.allow
         cat << 'EOF' > /var/spool/incron/root
 /tmp IN_CREATE /usr/local/bin/tsp_ownership.sh $@/$#
 EOF
