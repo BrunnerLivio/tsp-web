@@ -17,14 +17,14 @@ NODE_PREFIX=debian/tsp-web/usr/
 SUBSTVARS = -Vdist:Depends="|init-system-helpers"
 
 %:
-	dh $@ --with systemd
+	dh $@
 
 override_dh_auto_build:
 	npm install
 	npm build
 
-override_dh_auto_test:
-	npm test
+# override_dh_auto_test:
+# 	npm test
 
 override_dh_auto_install:
 	npm install --global --prefix $(NODE_PREFIX) .
