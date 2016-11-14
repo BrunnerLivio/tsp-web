@@ -14,6 +14,7 @@
 #export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 
 NODE_PREFIX=debian/tsp-web/usr/
+SUBSTVARS = -Vdist:Depends="|init-system-helpers"
 
 %:
 	dh $@ --with systemd
@@ -27,6 +28,9 @@ override_dh_auto_test:
 
 override_dh_auto_install:
 	npm install --global --prefix $(NODE_PREFIX) .
+
+override_dh_gencontrol:
+	dh_gencontrol -- $(SUBSTVARS)
 
 # dh_make generated override targets
 # This is example for Cmake (See https://bugs.debian.org/641051 )
