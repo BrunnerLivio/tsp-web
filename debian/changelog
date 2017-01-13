@@ -1,5 +1,5 @@
-tsp-web (1.0.0) xenial; urgency=medium
+tsp-web (1.0.1) xenial; urgency=medium
 
-  * Initial Release.
+  * Fix display shift when the command timing takes several hours.
 
  -- Eric Keller <eric.keller.ek1@roche.com>  Wed, 19 Oct 2016 09:12:30 +0200
