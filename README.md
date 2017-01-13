@@ -39,3 +39,5 @@ Use the Docker file to create your image and play around with tsp-web
 1. Execute some tsp commands in your container: `docker exec -d my-tsp-web /bin/bash -c "tsp -L OK ls && tsp -L NOK foobar && tsp -L WAIT sleep 30"`
 1. have a look at the web interface: `firefox "$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' my-tsp-web):3000"`
 
+Oneliner: `docker rm -f my-tsp-web && docker build -t $USER/tsp-web . && docker run --name my-tsp-web -d $USER/tsp-web:latest && docker exec -d my-tsp-web /bin/bash -c "tsp -L OK ls && tsp -L NOK foobar && tsp -L WAIT sleep 30" && firefox "$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' my-tsp-web):3000"`
+
