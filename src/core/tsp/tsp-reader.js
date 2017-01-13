@@ -1,10 +1,10 @@
 "use strict";
 
 var spawn = require('child_process').spawn,
-    shellParser = require('node-shell-parser'),
     chalk = require('chalk'),
     _ = require('lodash');
 
+var tspParser = require('./tsp-parser');
 /**
  * @module tspReader
  * @description
@@ -79,24 +79,12 @@ function tspReader() {
 
         tsp.stdout.on('data', function (data) {
             data = data.toString();
-            data = data.replace(/\[run=[0-9]\/[0-9]\]/g, '');
-            data = data.replace(/E-Level/g, 'ELevel ');
-            data = data.replace(/Times\(r\/u\/s\)/g, 'Times       ');
             shellOutput += data;
         });
 
 
         tsp.stdout.on('end', function () {
-            var output = shellParser(shellOutput);
-            output.forEach(function (item) {
-                if (item.Command.indexOf('[') !== -1) {
-                    var split = item.Command.split(/\[(.+\w)\]/g);
-                    item.Label = split[1];
-                    item.Command = split[2];
-                } else {
-                    item.Label = item.Command;
-                }
-            });
+            var output = tspParser.parse(shellOutput);
             if (_promise) {
                 _promise(output);
             }
