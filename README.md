@@ -1,4 +1,4 @@
-# TSP Web repository was migrated to internal bitbucket. To get access please contact with Roche DevTools Support
+# tsp-web
 
 Displays a overview of the task spooler server of your machine in real time.
 
