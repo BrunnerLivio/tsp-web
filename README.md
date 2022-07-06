@@ -35,9 +35,9 @@ Use the Docker file to create your image and play around with tsp-web
 
 1. Install Docker, following the instructions https://docs.docker.com/engine/installation/
 1. Build your docker image: `docker build -t $USER/tsp-web .`
-1. Create a container from this image: `docker run --name my-tsp-web -d $USER/tsp-web:latest`
+1. Create a container from this image: `docker run --name my-tsp-web -p "3000:3000" -d $USER/tsp-web:latest`
 1. Execute some tsp commands in your container: `docker exec -d my-tsp-web /bin/bash -c "tsp -L OK ls && tsp -L NOK foobar && tsp -L WAIT sleep 30"`
 1. have a look at the web interface: `firefox "$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' my-tsp-web):3000"`
 
-Oneliner: `docker rm -f my-tsp-web && docker build -t $USER/tsp-web . && docker run --name my-tsp-web -d $USER/tsp-web:latest && docker exec -d my-tsp-web /bin/bash -c "tsp -L OK ls && tsp -L NOK foobar && tsp -L WAIT sleep 30" && firefox "$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' my-tsp-web):3000"`
+Oneliner: `docker rm -f my-tsp-web && docker build -t $USER/tsp-web . && docker run --name my-tsp-web -p "3000:3000" -d $USER/tsp-web:latest && docker exec -d my-tsp-web /bin/bash -c "tsp -L OK ls && tsp -L NOK foobar && tsp -L WAIT sleep 30" && firefox "localhost:3000"`
 
