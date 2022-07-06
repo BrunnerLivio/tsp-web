@@ -31,6 +31,20 @@ In order to create a Debian package you have to:
 
 ## Try it out with docker
 
+Run the following command:
+
+```
+docker run -d -p "3000:3000" --name "my-tsp-web" ghcr.io/brunnerlivio/tsp-web:master
+
+# Spawn tasks
+docker exec -d my-tsp-web /bin/bash -c "tsp -L OK ls && tsp -L NOK foobar && tsp -L WAIT sleep 30"
+
+# Open up on localhost:3000
+```
+
+### From Source
+
+
 Use the Docker file to create your image and play around with tsp-web
 
 1. Install Docker, following the instructions https://docs.docker.com/engine/installation/
