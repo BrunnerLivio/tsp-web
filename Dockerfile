@@ -1,4 +1,4 @@
-FROM ubuntu:16:04
+FROM ubuntu:16.04
 MAINTAINER "keller.eric@gmail.com"
 
 RUN apt-get update
