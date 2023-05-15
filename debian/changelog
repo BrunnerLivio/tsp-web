@@ -1,3 +1,9 @@
+tsp-web (1.3.1) xenial; urgency=medium
+
+  * debian package not being part of GH release
+
+ -- Livio Brunner <livio.brunner.lb1@gmail.com>  Tue, 16 May 2023 01:05:30 +0200
+
 tsp-web (1.3.0) xenial; urgency=medium
 
   * add `TSP_WEB_PORT` env variable to control the port

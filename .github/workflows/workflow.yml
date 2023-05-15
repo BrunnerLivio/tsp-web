@@ -106,6 +106,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 18.x
+      - uses: actions/download-artifact@master
+        with:
+          name: Debian package
       - name: Install dependencies
         run: npm ci
       - name: Semantic Release
