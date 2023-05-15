@@ -1,8 +1,8 @@
-FROM ubuntu:16.04
-MAINTAINER "keller.eric@gmail.com"
+FROM node:18
+MAINTAINER "livio.brunner.lb1@gmail.com"
 
 RUN apt-get update
-RUN apt-get install -y  --no-install-recommends task-spooler nodejs nodejs-legacy npm
+RUN apt-get install -y  --no-install-recommends task-spooler
 
 RUN mkdir -p /tsp
 COPY . /tsp
