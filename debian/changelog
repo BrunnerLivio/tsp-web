@@ -1,3 +1,9 @@
+tsp-web (1.2.0) xenial; urgency=medium
+
+  * publish debian package on Github releases
+
+ -- Livio Brunner <livio.brunner.lb1@gmail.com>  Tue, 16 May 2023 00:29:30 +0200
+
 tsp-web (1.1.1) xenial; urgency=medium
 
   * run tsp-web with tsp-web start command
