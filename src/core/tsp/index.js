@@ -13,7 +13,7 @@ var tspReader = require('./tsp-reader'),
 function tsp() {
     return {
         reader: tspReader,
-        task: tspTask
+        task: tspTask,
     };
 }
 

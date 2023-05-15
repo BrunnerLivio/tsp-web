@@ -39,7 +39,6 @@ var TspTableModule = (function (socket, FileStreamModule) {
      */
     function onNewTspData(data) {
         self.data = data;
-        console.log("ASD");
         sort();
     }
 
@@ -93,7 +92,6 @@ var TspTableModule = (function (socket, FileStreamModule) {
                     found = false;
                 }
             });
-            console.log(found);
             return found;
         });
 

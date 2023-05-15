@@ -4,6 +4,7 @@ var spawn = require('child_process').spawn,
     chalk = require('chalk'),
     _ = require('lodash');
 
+const { TSP_WEB_BIN } = require('./env');
 var tspParser = require('./tsp-parser');
 /**
  * @module tspReader
@@ -74,7 +75,7 @@ function tspReader() {
     }
 
     function getTasks(_promise) {
-        tsp = spawn('tsp');
+        tsp = spawn(TSP_WEB_BIN);
         shellOutput = '';
 
         tsp.stdout.on('data', function (data) {

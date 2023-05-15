@@ -1,6 +1,7 @@
 "use strict";
 
 var spawn = require('child_process').spawn;
+const { TSP_WEB_BIN } = require('./env');
 var tspReader = require('./tsp-reader');
 var process = require('process');
 /**
@@ -24,9 +25,9 @@ function tspTask() {
     function remove(id) {
         tspReader().getTaskById(parseInt(id), function (task) {
             if (task.State === 'finished') {
-                spawn('tsp', ['-r', id]);
+                spawn(TSP_WEB_BIN, ['-r', id]);
             } else {
-                var tsp = spawn('tsp', ['-p', id]);
+                var tsp = spawn(TSP_WEB_BIN, ['-p', id]);
                 tsp.stdout.on('data', function (data) {
                     // Uint8array to string
                     var pid = "";
@@ -49,7 +50,7 @@ function tspTask() {
      * @memberOf tspTask
      */
     function killAll() {
-        spawn('tsp', ['-K']);
+        spawn(TSP_WEB_BIN, ['-K']);
     }
 
     var methods = {

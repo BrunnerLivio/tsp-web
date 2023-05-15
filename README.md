@@ -55,3 +55,8 @@ Use the Docker file to create your image and play around with tsp-web
 
 Oneliner: `docker rm -f my-tsp-web && docker build -t $USER/tsp-web . && docker run --name my-tsp-web -p "3000:3000" -d $USER/tsp-web:latest && docker exec -d my-tsp-web /bin/bash -c "tsp -L OK ls && tsp -L NOK foobar && tsp -L WAIT sleep 30" && firefox "localhost:3000"`
 
+### Environment
+
+| Environment   | Description            | Example                                 | Default |
+|:--------------|:-----------------------|:----------------------------------------|:--------|
+| `TSP_WEB_BIN` | The binary name of TSP | `tsp` (for Linux) <br /> `ts` (for Mac) | `tsp`   |
