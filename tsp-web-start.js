@@ -18,6 +18,8 @@ var log = path.join(os.tmpdir(), 'tsp-web');
 if (program.startup) {
     startup.create('tsp-web', process.execPath, [__dirname], log);
     console.log('Automaticly registered in startup');
+} else {
+  require('./index');
 }
 
 console.log([
