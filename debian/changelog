@@ -1,3 +1,9 @@
+tsp-web (1.1.1) xenial; urgency=medium
+
+  * run tsp-web with tsp-web start command
+
+ -- Livio Brunner <livio.brunner.lb1@gmail.com>  Tue, 16 May 2023 00:24:30 +0200
+
 tsp-web (1.0.1) xenial; urgency=medium
 
   * Fix display shift when the command timing takes several hours.

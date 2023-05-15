@@ -1,0 +1,13 @@
+{
+  "publish": [
+    {
+      "path": "@semantic-release/github",
+      "assets": [
+        {
+          "path": "tsp-web*.deb",
+          "label": "Debian Package"
+        }
+      ]
+    }
+  ]
+}
