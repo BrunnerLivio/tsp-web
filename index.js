@@ -1,4 +1,5 @@
 "use strict";
+// @ts-check
 
 var express = require('express'),
     app = express(),
@@ -8,7 +9,7 @@ var express = require('express'),
 
 app.set('ipaddr', '0.0.0.0');
 
-app.set('port', 3000);
+app.set('port', process.env.TSP_WEB_PORT || 3000);
 
 // === Public Static Routes ===
 

@@ -10,9 +10,8 @@ describe('TSPReader', function () {
     describe('Get notified', function () {
 
         it('should send a notification, when a task is created', function (done) {
-            spawn('tsp', ['-K']);
-            spawn('tsp', ['-L', 'test', 'ls']);
-            var counter = 0;
+            spawn(process.env.TSP_WEB_BIN || 'tsp', ['-K']);
+            spawn(process.env.TSP_WEB_BIN || 'tsp', ['-L', 'test', 'ls']);
             // wait until ls is finished
             setTimeout(function () {
                 var tspReader = tsp.reader()

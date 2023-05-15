@@ -57,6 +57,7 @@ Oneliner: `docker rm -f my-tsp-web && docker build -t $USER/tsp-web . && docker 
 
 ### Environment
 
-| Environment   | Description            | Example                                 | Default |
-|:--------------|:-----------------------|:----------------------------------------|:--------|
-| `TSP_WEB_BIN` | The binary name of TSP | `tsp` (for Linux) <br /> `ts` (for Mac) | `tsp`   |
+| Environment    | Description                       | Example                                 | Default |
+|:---------------|:----------------------------------|:----------------------------------------|:--------|
+| `TSP_WEB_BIN`  | The binary name of TSP            | `tsp` (for Linux) <br /> `ts` (for Mac) | `tsp`   |
+| `TSP_WEB_PORT` | The port number to run TSP-Web on | `8080`                                  | `3000`  |

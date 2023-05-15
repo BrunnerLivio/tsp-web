@@ -1,28 +1,29 @@
 #!/usr/bin/env node
 
-var program = require('commander');
-var startup = require('user-startup');
-var os = require('os');
-var path = require('path');
-var chalk = require('chalk');
+var program = require("commander");
+var startup = require("user-startup");
+var os = require("os");
+var path = require("path");
+var chalk = require("chalk");
 
 program
-    .usage('[options]')
-    .option('-s, --startup', 'Register as startup process')
-    .parse(process.argv);
-
+  .usage("[options]")
+  .option("-s, --startup", "Register as startup process")
+  .parse(process.argv);
 
 var keywords = program.args;
-var log = path.join(os.tmpdir(), 'tsp-web');
+var log = path.join(os.tmpdir(), "tsp-web");
 
 if (program.startup) {
-    startup.create('tsp-web', process.execPath, [__dirname], log);
-    console.log('Automaticly registered in startup');
+  startup.create("tsp-web", process.execPath, [__dirname], log);
+  console.log("Automaticly registered in startup");
 } else {
-  require('./index');
+  require("./index");
 }
 
-console.log([
-    'Started webserver',
-    'Go to ' + chalk.cyan('http://localhost:3000')
-].join('\n'));
+console.log(
+  [
+    "Started webserver",
+    "Go to " + chalk.cyan("http://localhost:" + process.env.TSP_WEB_PORT || 3000),
+  ].join("\n")
+);
