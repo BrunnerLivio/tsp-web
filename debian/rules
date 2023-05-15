@@ -20,7 +20,7 @@ SUBSTVARS = -Vdist:Depends="init-system-helpers"
 	dh $@ --with systemd
 
 override_dh_auto_build:
-	npm install
+	npm ci
 
 override_dh_auto_test:
 	npm test

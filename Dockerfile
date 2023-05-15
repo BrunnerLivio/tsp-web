@@ -10,7 +10,7 @@ COPY . /tsp
 ENV TS_SOCKET=/tsp/tsp-queue.socket
 WORKDIR /tsp
 
-RUN npm install
+RUN npm ci
 EXPOSE 3000
 ENTRYPOINT ["/usr/bin/node", "index.js"]
 
