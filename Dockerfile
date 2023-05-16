@@ -12,5 +12,5 @@ WORKDIR /tsp
 
 RUN npm ci
 EXPOSE 3000
-ENTRYPOINT ["/usr/bin/node", "index.js"]
+ENTRYPOINT ["/usr/local/bin/node", "index.js"]
 
