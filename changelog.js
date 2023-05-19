@@ -35,7 +35,7 @@ module.exports = {
     headerPartial: `tsp-web ({{version}}) xenial; urgency=medium`,
     commitPartial: `  * {{header}}
 `,
-    footerPartial: `-- {{packageData.author.name}} <{{packageData.author.email}}>  {{date}}
+    footerPartial: ` -- {{packageData.author.name}} <{{packageData.author.email}}>  {{date}}
 `,
   },
 };

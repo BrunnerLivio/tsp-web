@@ -7,7 +7,7 @@
     "start": "node index.js",
     "test": "./node_modules/.bin/mocha --reporter spec",
     "semantic-release": "semantic-release",
-    "generate-debian-changelog": "DRY_RUN=true npm run semantic-release --dry-run --no-ci && conventional-changelog -p angular -i debian/changelog -s -r 0 --config changelog.js  "
+    "generate-debian-changelog": "DRY_RUN=true semantic-release --dry-run --no-ci && conventional-changelog -p angular -i debian/changelog -s -r 0 --config changelog.js  "
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -46,6 +46,7 @@
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/npm": "10.0.3",
     "chai": "3.5.0",
+    "conventional-changelog-cli": "^2.2.2",
     "mocha": "3.1.0",
     "moment": "^2.29.4",
     "semantic-release": "21.0.2"
