@@ -4,7 +4,7 @@ on: [push]
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: brunnerlivio/tsp-web
 
 jobs:
   "nodejs":
@@ -26,12 +26,40 @@ jobs:
           sudo apt install -y task-spooler
       - name: npm test
         run: npm test
+  "debian-release-notes":
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Debian release notes
+        run: npm run generate-debian-changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Debian changelog
+          path: |
+            debian/changelog
+
   "debian-package":
     runs-on: ubuntu-latest
+    needs: ["debian-release-notes"]
     container: ghcr.io/brunnerlivio/tsp-web:build
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - uses: actions/download-artifact@master
+        with:
+          name: Debian changelog
       - name: Debian package
         run: |
           debuild -uc -us

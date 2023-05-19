@@ -9,3 +9,7 @@ debian/files
 debian/tsp-web.*.debhelper
 debian/tsp-web.substvars
 debian/tsp-web/
+
+debian/changelog
+
+.VERSION
