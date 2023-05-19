@@ -28,13 +28,12 @@ jobs:
         run: npm test
   "debian-package":
     runs-on: ubuntu-latest
+    container: ghcr.io/brunnerlivio/tsp-web:build
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Debian package
         run: |
-          sudo apt-get update -y
-          sudo apt install -y build-essential fakeroot devscripts nodejs task-spooler npm debhelper
           debuild -uc -us
           mv ../tsp-web*.deb .
       - name: Archive production artifacts
@@ -74,6 +73,8 @@ jobs:
       packages: write
       pages: write
       id-token: write
+      issues: write
+      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2

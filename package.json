@@ -8,6 +8,10 @@
     "test": "./node_modules/.bin/mocha --reporter spec",
     "semantic-release": "semantic-release"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "tag": "latest"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/brunnerlivio/tsp-web"
