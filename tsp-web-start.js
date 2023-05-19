@@ -21,9 +21,10 @@ if (program.startup) {
   require("./index");
 }
 
+var hostname =  process.env.TSP_WEB_HOSTNAME || '0.0.0.0'
 console.log(
   [
     "Started webserver",
-    "Go to " + chalk.cyan("http://localhost:" + process.env.TSP_WEB_PORT || 3000),
+    "Go to " + chalk.cyan("http://" + hostname + ":" + process.env.TSP_WEB_PORT || 3000),
   ].join("\n")
 );
