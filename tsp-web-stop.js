@@ -22,4 +22,6 @@ if (program.startup) {
 }
 
 console.log('Stop Server');
-got.delete('http://localhost:' + process.env.TSP_WEB_PORT || 3000);
+
+var hostname =  process.env.TSP_WEB_HOSTNAME || '0.0.0.0'
+got.delete('http://'+ hostname + ':' + process.env.TSP_WEB_PORT || 3000);

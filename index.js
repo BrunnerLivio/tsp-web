@@ -7,7 +7,7 @@ var express = require('express'),
     io = require('socket.io').listen(http),
     chalk = require('chalk');
 
-app.set('ipaddr', '0.0.0.0');
+app.set('ipaddr', process.env.TSP_WEB_HOSTNAME || '0.0.0.0');
 
 app.set('port', process.env.TSP_WEB_PORT || 3000);
 
