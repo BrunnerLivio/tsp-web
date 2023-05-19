@@ -25,7 +25,7 @@ describe('TSPReader', function () {
                         done();
                     })
                     .watch();
-            }, 5);
+            }, 200);
 
         });
 
