@@ -14,7 +14,7 @@ module.exports = {
     [
       "@semantic-release-plus/docker",
       {
-        name: process.env.IMAGE_NAME.toLowerCase() + ":master",
+        name: process.env.IMAGE_NAME.toLowerCase(),
         registry: process.env.REGISTRY,
       },
     ],
