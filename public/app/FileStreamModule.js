@@ -4,7 +4,8 @@ var FileStreamModule = (function (socket) {
     var self = {},
         $fileStreamDialog,
         $fileStreamDialogShadow,
-        $content;
+        $content,
+        $close;
 
     $(document).ready(init);
 
@@ -18,12 +19,12 @@ var FileStreamModule = (function (socket) {
         $fileStreamDialog = $('#fileStreamDialog');
         $fileStreamDialogShadow = $('#fileStreamDialogShadow');
         $content = $fileStreamDialog.find('.content');
-        $fileStreamDialogShadow.click(function () {
-            closeDialog();
-        });
+        $close = $fileStreamDialog.find('.dialog-close');
 
-        $(document).keydown(function (e) {
-            var code = e.keyCode || e.which;
+        $fileStreamDialogShadow.click(() => closeDialog());
+        $close.click(() => closeDialog());
+        $(document).keydown((e) => {
+            const code = e.keyCode || e.which;
             // Press escape
             if (code === 27) {
                 closeDialog();
@@ -55,7 +56,6 @@ var FileStreamModule = (function (socket) {
         socket.on('fileChanged', onFileChanged);
         $fileStreamDialog.fadeIn();
         $fileStreamDialogShadow.fadeIn();
-
     }
 
     /**
@@ -68,6 +68,16 @@ var FileStreamModule = (function (socket) {
      */
     function onFileChanged(content) {
         $content.html(content.replace(/\n/g, '<br/>'));
+        const scrollPosition = $content.scrollTop() + $content.innerHeight();
+        if (scrollPosition >= $content.get(0).scrollHeight - 100) {
+            scrollToBottom();
+        }
+    }
+
+    function scrollToBottom() {
+        $content.animate({
+            scrollTop: $content.get(0).scrollHeight
+        }, 1500);
     }
 
     return {

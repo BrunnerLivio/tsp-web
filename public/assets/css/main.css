@@ -130,14 +130,43 @@ tr:not(#header):hover {
     padding-bottom: 90px;
 }
 
+@media (max-width: 600px) {
+    .dialog {
+        width: 100vw;
+        height: calc(100vh - 30px);
+        padding: 0px;
+    }
+}
+
 .dialog .content {
     background-color: #1D1F20;
-    height: 100%;
+    height: calc(100% - 100px);
     overflow-y: scroll;
     color: #eeeeee;
     padding: 5px;
+    word-wrap: break-word;
+    white-space: break-spaces;
+    word-break: break-word;
+    display: inline-block;
+    max-width: calc(100% - 30px);
     font-family: 'Roboto Mono', monospace;
     margin: 15px;
+}
+
+.dialog .dialog-header {
+  display: flex;
+  align-items: center;
+  padding-right: 30px;
+}
+
+.dialog-header h2 {
+  flex-grow: 1;
+}
+
+.dialog-close {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 20px;
+  color:rgba(0, 0, 0, 0.8)
 }
 
 a {
