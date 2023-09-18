@@ -1,7 +1,6 @@
 const plugins = [
   "@semantic-release/commit-analyzer",
   "@semantic-release/release-notes-generator",
-  "@semantic-release/npm",
   [
     "@semantic-release/exec",
     {
@@ -22,8 +21,8 @@ const plugins = [
     {
       assets: [
         {
-          path: "tsp-web*.deb",
-          label: "Debian Package",
+          path: ".bin/tsp-web",
+          label: "TSP Web Binary",
         },
       ],
     },

@@ -1,0 +1,46 @@
+html, body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  background: #030014;
+  color: #efedfd99;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("assets/fonts/Inter-VariableFont_slnt,wght.ttf") format("woff2 supports variations"),
+       url("assets/fonts/Inter-VariableFont_slnt,wght.ttf") format("woff2-variations");
+  font-weight: 100 1000;
+}
+
+:root {
+  --sl-color-primary-50: #000000;
+  --sl-color-primary-100: #221933;
+  --sl-color-primary-200: #433366;
+  --sl-color-primary-300: #654c99;
+  --sl-color-primary-400: #8666cc;
+  --sl-color-primary-500: #a87fff;
+  --sl-color-primary-600: #b18cff;
+  --sl-color-primary-700: #c2a5ff;
+  --sl-color-primary-800: #d4bfff;
+  --sl-color-primary-900: #e5d9ff;
+  --sl-color-primary-950: #f6f2ff;
+
+  --sl-color-neutral-0: var(--sl-color-primary-50);
+  --sl-color-neutral-50: var(--sl-color-primary-50);
+  --sl-color-neutral-100: var(--sl-color-primary-100);
+  --sl-color-neutral-200: var(--sl-color-primary-200);
+  --sl-color-neutral-300: var(--sl-color-primary-300);
+  --sl-color-neutral-400: var(--sl-color-primary-400);
+  --sl-color-neutral-500: var(--sl-color-primary-500);
+  --sl-color-neutral-600: var(--sl-color-primary-600);
+  --sl-color-neutral-700: var(--sl-color-primary-700);
+  --sl-color-neutral-800: var(--sl-color-primary-800);
+  --sl-color-neutral-900: var(--sl-color-primary-900);
+  --sl-color-neutral-950: var(--sl-color-primary-950);
+}
