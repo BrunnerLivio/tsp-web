@@ -1,16 +1,29 @@
-FROM node:18
-MAINTAINER "livio.brunner.lb1@gmail.com"
+FROM golang:1.19 AS build-stage
 
-RUN apt-get update
-RUN apt-get install -y  --no-install-recommends task-spooler
+WORKDIR /app
 
-RUN mkdir -p /tsp
-COPY . /tsp
+COPY go.mod go.sum ./
+RUN go mod download
 
-ENV TS_SOCKET=/tsp/tsp-queue.socket
-WORKDIR /tsp
+COPY . ./
 
-RUN npm ci
+RUN CGO_ENABLED=0 GOOS=linux go build -o /tsp-web ./main.go
+
+# Run the tests in the container
+FROM build-stage AS run-test-stage
+RUN go test -v ./...
+
+# Deploy the application binary into a lean image
+FROM debian:stable-slim AS build-release-stage
+
+WORKDIR /
+
+RUN apt-get update && apt-get install -y task-spooler
+
+COPY --from=build-stage /tsp-web /tsp-web
+
+# USER nonroot:nonroot
+
 EXPOSE 3000
-ENTRYPOINT ["/usr/local/bin/node", "index.js"]
 
+ENTRYPOINT ["/tsp-web"]
