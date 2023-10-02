@@ -2,10 +2,11 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"tsp-web/internal/args"
 	userconf "tsp-web/internal/user-conf"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func LabelController(args args.TspWebArgs) {
@@ -29,7 +30,7 @@ func GetLabels(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 	labels, err := userconf.GetLabels(args)
 	res, err := json.Marshal(labels)
 	if err != nil {
-		fmt.Printf("Error creating label: %s\n", err)
+		log.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -45,7 +46,7 @@ func PostLabel(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 	res, err := json.Marshal(conf.Labels)
 
 	if err != nil {
-		fmt.Printf("Error creating label: %s\n", err)
+		log.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -61,7 +62,7 @@ func PutLabel(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 	res, err := json.Marshal(conf.Labels)
 
 	if err != nil {
-		fmt.Printf("Error updating label: %s\n", err)
+		log.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -77,7 +78,7 @@ func DeleteLabel(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 	res, err := json.Marshal(conf.Labels)
 
 	if err != nil {
-		fmt.Printf("Error removing label: %s\n", err)
+		log.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

@@ -1,12 +1,12 @@
 package userconf
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	utils "tsp-web/internal"
 	"tsp-web/internal/args"
 
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 )
 
@@ -43,9 +43,9 @@ type UserConf struct {
 var cachedConf UserConf = UserConf{}
 
 func StartWatcher(args args.TspWebArgs) {
-	log.Default().Println("Starting user conf watcher")
+	log.Debug("Starting user conf watcher")
 	utils.FileWatcher(func() {
-		log.Default().Println("Reloading user conf")
+		log.Info("User conf changed, reloading...")
 		Load(args)
 	}, getConfPath(args))
 }
@@ -55,23 +55,18 @@ func GetUserConf(args args.TspWebArgs) UserConf {
 }
 
 func Load(args args.TspWebArgs) {
-	conf, err := load(args)
-	if err != nil {
-		log.Println(err)
-	} else {
-		cachedConf = conf
-	}
+	cachedConf = load(args)
 }
 
-func load(args args.TspWebArgs) (UserConf, error) {
+func load(args args.TspWebArgs) UserConf {
 	conf := UserConf{}
 	confPath := getConfPath(args)
 	ensureConfExists(confPath)
 
 	f, err := os.Open(confPath)
 	if err != nil {
-		log.Println(err)
-		return UserConf{}, err
+		log.Error(confPath, ": ", err)
+		return UserConf{}
 	}
 
 	decoder := yaml.NewDecoder(f)
@@ -80,11 +75,11 @@ func load(args args.TspWebArgs) (UserConf, error) {
 	defer f.Close()
 
 	if err != nil {
-		log.Println(err)
-		return UserConf{}, err
+		log.Error(confPath, ": ", err)
+		return UserConf{}
 	}
 
-	return conf, nil
+	return conf
 }
 
 func writeUserConf(args args.TspWebArgs, conf UserConf) (UserConf, error) {
@@ -93,7 +88,6 @@ func writeUserConf(args args.TspWebArgs, conf UserConf) (UserConf, error) {
 
 	f, err := os.OpenFile(confPath, os.O_WRONLY, 0644)
 	if err != nil {
-		log.Println(err)
 		return UserConf{}, err
 	}
 
@@ -103,7 +97,6 @@ func writeUserConf(args args.TspWebArgs, conf UserConf) (UserConf, error) {
 	err = encoder.Encode(conf)
 
 	if err != nil {
-		log.Println(err)
 		return UserConf{}, err
 	}
 
@@ -113,7 +106,7 @@ func writeUserConf(args args.TspWebArgs, conf UserConf) (UserConf, error) {
 func getConfPath(args args.TspWebArgs) string {
 	home, err := os.UserHomeDir()
 	if err != nil {
-		log.Println(err)
+		log.Error(err)
 		return ""
 	}
 
@@ -124,22 +117,11 @@ func ensureConfExists(confPath string) error {
 	_, err := os.Stat(confPath)
 	if os.IsNotExist(err) {
 		err = os.MkdirAll(filepath.Dir(confPath), 0755)
-		if err != nil {
-			log.Println(err)
-			return err
-		}
-
 		f, err := os.Create(confPath)
-		if err != nil {
-			log.Println(err)
-			return err
-		}
-
-		defer f.Close()
-
 		_, err = f.WriteString(initialConf)
+
 		if err != nil {
-			log.Println(err)
+			log.Error(err)
 			return err
 		}
 	}

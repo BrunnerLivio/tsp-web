@@ -2,12 +2,13 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os/exec"
 	"tsp-web/internal/args"
 	taskspooler "tsp-web/internal/task-spooler"
 	userconf "tsp-web/internal/user-conf"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var cachedTasks []taskspooler.Task
@@ -83,7 +84,7 @@ func GetList(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 
 	res, err := json.Marshal(currentTasks)
 	if err != nil {
-		fmt.Printf("error marshalling tasks: %s\n", err)
+		log.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -99,7 +100,7 @@ func PostExec(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 	var command ExecArg
 	err := json.NewDecoder(r.Body).Decode(&command)
 	if err != nil {
-		fmt.Printf("Error decoding command: %s\n", err)
+		log.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -115,16 +116,16 @@ func PostExec(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 	}
 
 	if foundCommand == nil {
-		fmt.Printf("Command not found: %s\n", command.Name)
+		log.Error("Command not found: ", command.Name)
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
-	fmt.Println("Executing command from user request with args: ", args.TsBin, foundCommand.Args)
+	log.Info("Executing command from user request with args: ", args.TsBin, foundCommand.Args)
 	cmd := exec.Command(args.TsBin, foundCommand.Args...)
 	out, err := cmd.Output()
 	if err != nil {
-		fmt.Printf("Error executing command: %s\n", err)
+		log.Error("Error executing command: ", err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 

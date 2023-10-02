@@ -12,6 +12,7 @@ import (
 	userconf "tsp-web/internal/user-conf"
 
 	"github.com/olahol/melody"
+	log "github.com/sirupsen/logrus"
 )
 
 var allowOriginFunc = func(r *http.Request) bool {
@@ -28,7 +29,6 @@ func Run(args args.TspWebArgs) error {
 	fileMatcher := regexp.MustCompile(`\.[a-zA-Z]*$`)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if !fileMatcher.MatchString(r.URL.Path) {
-			// http.ServeFile(w, r, "web/index.html")
 			var index, _ = Static.ReadFile("web/index.html")
 			w.Write(index)
 		} else {
@@ -43,7 +43,6 @@ func Run(args args.TspWebArgs) error {
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		fmt.Printf("got message: %s\n", msg)
 		message := string(msg)
 		messageSplit := strings.Split(message, ":")
 		command := messageSplit[0]
@@ -64,7 +63,7 @@ func Run(args args.TspWebArgs) error {
 		CommandController(args)
 	}
 
-	fmt.Printf("Running server on http://0.0.0.0:%d\n", args.Port)
+	log.Info("Running server on http://0.0.0.0:", args.Port)
 
 	return http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", args.Port), nil)
 }

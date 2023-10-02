@@ -10,6 +10,8 @@ import (
 	"tsp-web/api"
 	"tsp-web/internal/args"
 	userconf "tsp-web/internal/user-conf"
+
+	log "github.com/sirupsen/logrus"
 )
 
 //go:embed web/*
@@ -28,6 +30,8 @@ const maxPort uint64 = 65535
 func parseArgs() (args.TspWebArgs, error) {
 	TsBin := flag.String("ts-bin", getenv("TSP_WEB_TS_BIN", "tsp"), "The binary for tsp")
 	portArg := flag.Uint64("port", 3000, "The port for tsp-web")
+	logLevel := flag.String("log-level", getenv("TSP_WEB_LOG_LEVEL", "info"), "The log level for tsp-web")
+	noColor := flag.Bool("no-color", false, "Disable colorized output")
 
 	flag.Parse()
 
@@ -37,16 +41,34 @@ func parseArgs() (args.TspWebArgs, error) {
 
 	Port := uint16(*portArg)
 
-	return args.TspWebArgs{TsBin: *TsBin, Port: Port}, nil
+	return args.TspWebArgs{TsBin: *TsBin, Port: Port, LogLevel: *logLevel, NoColor: *noColor}, nil
+}
+
+func setLogLevel(logLevel string) {
+	switch logLevel {
+	case "debug":
+		log.SetLevel(log.DebugLevel)
+	case "info":
+		log.SetLevel(log.InfoLevel)
+	case "warn":
+		log.SetLevel(log.WarnLevel)
+	default:
+		log.SetLevel(log.InfoLevel)
+	}
 }
 
 func main() {
 	api.Static = static
 
 	args, err := parseArgs()
+	setLogLevel(args.LogLevel)
+	log.SetFormatter(&log.TextFormatter{
+		FullTimestamp: true,
+		DisableColors: args.NoColor,
+	})
 
 	if err != nil {
-		fmt.Printf("%s\n", err)
+		log.Error(err)
 		flag.Usage()
 		os.Exit(1)
 	}
@@ -56,10 +78,9 @@ func main() {
 	err = api.Run(args)
 
 	if errors.Is(err, http.ErrServerClosed) {
-		fmt.Printf("server closed\n")
+		log.Info("server closed")
 	} else if err != nil {
-		fmt.Printf("error starting server: %s\n", err)
-		os.Exit(1)
+		log.Fatal("error starting server: ", err)
 	}
 	os.Exit(0)
 }
