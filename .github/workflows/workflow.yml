@@ -7,72 +7,45 @@ env:
   IMAGE_NAME: brunnerlivio/tsp-web
 
 jobs:
-  "nodejs":
+  "build":
+    strategy:
+      matrix:
+        version:
+          [
+            # Windows
+            { NAME: "Windows amd64", GOOS: "windows", GOARCH: "amd64", GOARM: "", OUTPUT: ".bin/tsp-web.exe" },
+
+            # Linux
+            { NAME: "Linux amd64", GOOS: "linux", GOARCH: "amd64", GOARM: "", OUTPUT: ".bin/tsp-web_linux_amd64" },
+            { NAME: "Linux arm64", GOOS: "linux", GOARCH: "arm64", GOARM: "", OUTPUT: ".bin/tsp-web_linux_arm64" },
+            { NAME: "Linux armv5", GOOS: "linux", GOARCH: "arm", GOARM: "5", OUTPUT: ".bin/tsp-web_linux_armv5" },
+            { NAME: "Linux armv7", GOOS: "linux", GOARCH: "arm", GOARM: "7", OUTPUT: ".bin/tsp-web_linux_armv7" },
+
+            # Mac
+            { NAME: "Darwin arm64", GOOS: "darwin", GOARCH: "arm64", GOARM: "", OUTPUT: ".bin/tsp-web_darwin_arm64" },
+            { NAME: "Darwin amd64", GOOS: "darwin", GOARCH: "amd64", GOARM: "", OUTPUT: ".bin/tsp-web_darwin_amd64" }
+          ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v2
+      - name: Set up Go
+        uses: actions/setup-go@v4
         with:
-          node-version: 18.x
-          cache: npm
-      - name: Install dependencies
-        run: npm ci
-        env:
-          CI: true
-      - name: Setup test environment
-        run: |
-          sudo apt-get update -y
-          sudo apt install -y task-spooler
-      - name: npm test
-        run: npm test
-  "debian-release-notes":
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 18.x
-          cache: npm
-      - name: Install dependencies
-        run: npm ci
-      - name: Debian release notes
-        run: npm run generate-debian-changelog
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: perl -p -i -e 'chomp if eof' debian/changelog
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: Debian changelog
-          path: |
-            debian/changelog
+          go-version: "1.19"
 
-  "debian-package":
-    runs-on: ubuntu-latest
-    needs: ["debian-release-notes"]
-    container: ghcr.io/brunnerlivio/tsp-web:build
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - uses: actions/download-artifact@master
-        with:
-          name: Debian changelog
-          path: debian
-      - name: Debian package
-        run: |
-          cat debian/changelog
-          debuild -uc -us
-          mv ../tsp-web*.deb .
+      - name: Install dependencies
+        run: make install
+
+      - name: Build ${{ matrix.version.NAME }}
+        run: GOOS=${{ matrix.version.GOOS }} GOARCH=${{ matrix.version.GOARCH }} GOARM=${{ matrix.version.GOARM }} go build -o ${{ matrix.version.OUTPUT }} ./main.go
+
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: Debian package
+          name: "tsp-web"
           path: |
-            tsp-web*.deb
+            .bin/*
+
   "docker-build":
     runs-on: ubuntu-latest
     permissions:
@@ -83,10 +56,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
- 
   "semantic-release":
     runs-on: ubuntu-latest
-    needs: ["nodejs", "debian-package", "docker-build"]
+    needs: ["build", "docker-build"]
     permissions:
       contents: write
       packages: write
@@ -104,10 +76,9 @@ jobs:
           cache: npm
       - uses: actions/download-artifact@master
         with:
-          name: Debian package
+          name: "tsp-web"
       - name: Install dependencies
         run: npm ci
-
       - run: docker build --tag ${{ env.IMAGE_NAME }} .
       - name: Semantic Release
         run: npm run semantic-release

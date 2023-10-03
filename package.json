@@ -1,54 +1,21 @@
 {
   "name": "tsp-web",
   "version": "0.0.0-development",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "./node_modules/.bin/mocha --reporter spec",
-    "semantic-release": "semantic-release",
-    "generate-debian-changelog": "DRY_RUN=true semantic-release --dry-run --no-ci && conventional-changelog -p angular -i debian/changelog -s -r 0 --config changelog.js  "
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "tag": "latest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/brunnerlivio/tsp-web"
-  },
-  "keywords": [
-    "tsp",
-    "task-spooler",
-    "monitor"
-  ],
-  "bin": "bin.js",
-  "author": "Livio Brunner <livio.brunner.lb1@gmail.com>",
-  "license": "ISC",
-  "dependencies": {
-    "chalk": "1.1.3",
-    "child_process": "1.0.2",
-    "commander": "2.9.0",
-    "express": "4.14.0",
-    "got": "6.5.0",
-    "hint.css": "2.4.0",
-    "jquery": "3.1.1",
-    "lodash": "4.16.4",
-    "os": "0.1.1",
-    "path": "0.12.7",
-    "socket.io": "1.7.4",
-    "toastr": "2.1.2",
-    "user-startup": "0.2.2"
+    "semantic-release": "semantic-release"
   },
   "devDependencies": {
     "@semantic-release-plus/docker": "^3.1.2",
-    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/exec": "^6.0.3",
-    "@semantic-release/npm": "10.0.3",
-    "chai": "3.5.0",
-    "conventional-changelog-cli": "^2.2.2",
-    "mocha": "3.1.0",
-    "moment": "^2.29.4",
-    "semantic-release": "21.0.2"
+    "@semantic-release/npm": "^11.0.0",
+    "@types/socket.io-client": "^1.4.36",
+    "semantic-release": "^22.0.0"
+  },
+  "dependencies": {
+    "@shoelace-style/shoelace": "^2.8.0",
+    "@vaadin/router": "^1.7.5",
+    "date-fns": "^2.30.0",
+    "lit": "^2.8.0"
   }
 }

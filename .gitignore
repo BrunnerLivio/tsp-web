@@ -13,3 +13,4 @@ debian/tsp-web/
 debian/changelog
 
 .VERSION
+.bin/

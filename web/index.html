@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" class="sl-theme-dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Spooler Web</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/themes/dark.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <app-root></app-root>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "lit": "https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js",
+          "@vaadin/router": "https://unpkg.com/@vaadin/router",
+          "date-fns": "https://cdn.jsdelivr.net/npm/date-fns@2.30.0/+esm"
+        }
+      }
+    </script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/components/button/button.js"
+    ></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/components/skeleton/skeleton.js"
+    ></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/components/details/details.js"
+    ></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/components/badge/badge.js"
+    ></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/components/icon/icon.js"
+    ></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
