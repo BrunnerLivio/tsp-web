@@ -6,4 +6,5 @@ type TspWebArgs struct {
 	ConfigPath string
 	LogLevel   string
 	NoColor    bool
+	Host       string
 }

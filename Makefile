@@ -5,4 +5,4 @@ build:
 	go build -o ./.bin/tsp-web ./main.go
 
 dev:
-	gow run main.go
+	gow -e=go,mod,html,css,js run main.go

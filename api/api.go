@@ -65,5 +65,5 @@ func Run(args args.TspWebArgs) error {
 
 	log.Info("Running server on http://0.0.0.0:", args.Port)
 
-	return http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", args.Port), nil)
+	return http.ListenAndServe(fmt.Sprintf("%s:%d", args.Host, args.Port), nil)
 }

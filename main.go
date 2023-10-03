@@ -7,9 +7,12 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"tsp-web/api"
 	"tsp-web/internal/args"
 	userconf "tsp-web/internal/user-conf"
+
+	utils "tsp-web/internal"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -17,21 +20,15 @@ import (
 //go:embed web/*
 var static embed.FS
 
-func getenv(key string, def string) string {
-	val, ok := os.LookupEnv(key)
-	if !ok {
-		val = def
-	}
-	return val
-}
-
 const maxPort uint64 = 65535
 
 func parseArgs() (args.TspWebArgs, error) {
-	TsBin := flag.String("ts-bin", getenv("TSP_WEB_TS_BIN", "tsp"), "The binary for tsp")
-	portArg := flag.Uint64("port", 3000, "The port for tsp-web")
-	logLevel := flag.String("log-level", getenv("TSP_WEB_LOG_LEVEL", "info"), "The log level for tsp-web")
+	envPort, _ := strconv.ParseUint(utils.Getenv("TSP_WEB_PORT", "3000"), 10, 16)
+	TsBin := flag.String("ts-bin", utils.Getenv("TSP_WEB_TS_BIN", "tsp"), "The binary for tsp")
+	portArg := flag.Uint64("port", envPort, "The port for tsp-web")
+	logLevel := flag.String("log-level", utils.Getenv("TSP_WEB_LOG_LEVEL", "info"), "The log level for tsp-web")
 	noColor := flag.Bool("no-color", false, "Disable colorized output")
+	host := flag.String("host", utils.Getenv("TSP_WEB_HOSTNAME", "localhost"), "The host for tsp-web")
 
 	flag.Parse()
 
@@ -41,7 +38,12 @@ func parseArgs() (args.TspWebArgs, error) {
 
 	Port := uint16(*portArg)
 
-	return args.TspWebArgs{TsBin: *TsBin, Port: Port, LogLevel: *logLevel, NoColor: *noColor}, nil
+	return args.TspWebArgs{
+		TsBin:    *TsBin,
+		Port:     Port,
+		LogLevel: *logLevel,
+		NoColor:  *noColor,
+		Host:     *host}, nil
 }
 
 func setLogLevel(logLevel string) {

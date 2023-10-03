@@ -2,6 +2,7 @@ package util
 
 import (
 	"log"
+	"os"
 
 	"github.com/fsnotify/fsnotify"
 )
@@ -38,4 +39,12 @@ func FileWatcher(f func(), path string) {
 	}
 
 	<-make(chan struct{})
+}
+
+func Getenv(key string, def string) string {
+	val, ok := os.LookupEnv(key)
+	if !ok {
+		val = def
+	}
+	return val
 }

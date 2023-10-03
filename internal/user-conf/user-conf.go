@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const defaultConfLocation = ".config/tsp-web/config.yml"
+const defaultConfLocation = "tsp-web/config.yml"
 const initialConf = `# To disable command execution, comment out the "command" block
 commands:
   - name: "Sleep"
@@ -104,13 +104,9 @@ func writeUserConf(args args.TspWebArgs, conf UserConf) (UserConf, error) {
 }
 
 func getConfPath(args args.TspWebArgs) string {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		log.Error(err)
-		return ""
-	}
-
-	return filepath.Join(home, defaultConfLocation)
+	homedir, _ := os.UserHomeDir()
+	configDir := utils.Getenv("XDG_CONFIG_HOME", filepath.Join(homedir, ".config"))
+	return filepath.Join(configDir, defaultConfLocation)
 }
 
 func ensureConfExists(confPath string) error {
