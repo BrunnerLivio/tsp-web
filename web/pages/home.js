@@ -27,10 +27,16 @@ export class Home extends LitElement {
 
   static styles = css`
     :host .container {
-      padding: var(--sl-spacing-2x-large);
+      padding: var(--sl-spacing-small);
       display: flex;
       flex-direction: column;
       gap: var(--sl-spacing-large);
+    }
+
+    @media (min-width: 768px) {
+      :host .container {
+        padding: var(--sl-spacing-2x-large);
+      }
     }
   `;
 

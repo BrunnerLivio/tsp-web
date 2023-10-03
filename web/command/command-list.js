@@ -15,6 +15,15 @@ export class CommandList extends LitElement {
     }
   }
 
+  static styles = css`
+    :host .container {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sl-spacing-medium);
+    }
+  `;
+
   async #loadCommands() {
     this.commands = await fetch('/api/v1/command')
       .then(response => response.json())
@@ -40,12 +49,12 @@ export class CommandList extends LitElement {
     return html`
       <div class="container">
       ${this.commands.map((command) => {
-        return html`
+      return html`
           <sl-button @click=${() => this.#exec(command)} variant="default" size="large">
             <sl-icon slot="prefix" name="play-circle"></sl-icon>
             Start ${command.Name}
           </sl-button>`
-        })}
+    })}
       </div>
     `;
   }

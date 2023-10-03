@@ -59,7 +59,6 @@ export class TaskItem extends LitElement {
       display: flex;
       flex-direction: column;
       gap: var(--sl-spacing-small);
-      padding: var(--sl-spacing-medium);
     }
 
     :host .task-item-details-row {
@@ -73,6 +72,17 @@ export class TaskItem extends LitElement {
 
     :host .task-item-id {
       opacity: 0.5;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      :host .task-item-id {
+        display: block;
+      }
+
+      :host .task-item-details {
+        padding: var(--sl-spacing-medium);
+      }
     }
 
     :host .spacer {
