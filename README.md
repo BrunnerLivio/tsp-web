@@ -2,63 +2,53 @@
 
 Displays a overview of the task spooler server of your machine in real time.
 
-![TSP Web Preview](http://i.imgur.com/5TL7OeP.jpg)
-
+![TSP Web Preview](.github/screenshot.png)
 
 ## Installation
 
-### Production
+1. Make sure [you have `task-spooler` installed on your system](https://github.com/justanhduc/task-spooler)
 
-1. Install NodeJS
-1. Run `sudo npm install -g tsp-web`
-1. To start the server and set to startup `tsp-web start --startup`
+1. Download the tsp-web binary from our [releases page](https://github.com/BrunnerLivio/tsp-web/releases)
+2. Make it executable
 
-### Development
-
-1. Install NodeJS `sudo apt update && sudo apt install -y nodejs nodejs-legacy npm`
-1. Run `npm install && npm start`
-1. Open your browser on `http://localhost:3000`
-
-### Debian package
-
-In order to create a Debian package you have to:
-
-1. Install package dependencies `sudo apt update && sudo apt install -y build-essential fakeroot devscripts`
-1. In the root directory of this project call `debuild -uc -us`
-1. Install your Debian package `sudo dpkg -i ../tsp-web*.deb`
-1. add your user to the tsp group `sudo usermod -aG tsp $USER`
-1. Log out and log back in. This ensures your user is running with the correct permissions.
-
-## Try it out with docker
-
-Run the following command:
-
-```
-docker run -d -p "3000:3000" --name "my-tsp-web" ghcr.io/brunnerlivio/tsp-web:master
-
-# Spawn tasks
-docker exec -d my-tsp-web /bin/bash -c "tsp -L OK ls && tsp -L NOK foobar && tsp -L WAIT sleep 30"
-
-# Open up on localhost:3000
+```bash
+chmod +x ./tsp-web*
 ```
 
-### From Source
+3. Run it
 
+```bash
+./tsp-web*
+```
 
-Use the Docker file to create your image and play around with tsp-web
+4. Run your first task
 
-1. Install Docker, following the instructions https://docs.docker.com/engine/installation/
-1. Build your docker image: `docker build -t $USER/tsp-web .`
-1. Create a container from this image: `docker run --name my-tsp-web -p "3000:3000" -d $USER/tsp-web:latest`
-1. Execute some tsp commands in your container: `docker exec -d my-tsp-web /bin/bash -c "tsp -L OK ls && tsp -L NOK foobar && tsp -L WAIT sleep 30"`
-1. have a look at the web interface: `firefox "$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' my-tsp-web):3000"`
+```bash
+ts -L sleep sleep 30
+```
 
-Oneliner: `docker rm -f my-tsp-web && docker build -t $USER/tsp-web . && docker run --name my-tsp-web -p "3000:3000" -d $USER/tsp-web:latest && docker exec -d my-tsp-web /bin/bash -c "tsp -L OK ls && tsp -L NOK foobar && tsp -L WAIT sleep 30" && firefox "localhost:3000"`
+### Arguments and Environment variables
 
-### Environment
+| Argument      | Environment         | Description                                         | Example                                 | Default     |
+|:--------------|:--------------------|:----------------------------------------------------|:----------------------------------------|:------------|
+| `--ts-bin`    | `TSP_WEB_TS_BIN`    | The binary name of TSP                              | `tsp` (for Linux) <br /> `ts` (for Mac) | `tsp`       |
+| `--port`      | `TSP_WEB_POST`      | The port number to run TSP-Web on                   | `8080`                                  | `3000`      |
+| `--host`      | `TSP_WEB_HOSTNAME`  | The hostname to run TSP-Web on                      | `192.168.0.20`                          | `localhost` |
+| `--log-level` | `TSP_WEB_LOG_LEVEL` | The log level can be `'debug' or 'info' or 'warn'`  | `warn`                                  | `info`      |
+| `--no-color`  | -                   | Whether the logs should be displayed without colors | -                                       | `false`     |
 
-| Environment    | Description                         | Example                                 | Default   |
-|:---------------|:------------------------------------|:----------------------------------------|:----------|
-| `TSP_WEB_BIN`  | The binary name of TSP              | `tsp` (for Linux) <br /> `ts` (for Mac) | `tsp`     |
-| `TSP_WEB_PORT` | The port number to run TSP-Web on   | `8080`                                  | `3000`    |
-| `TSP_WEB_HOSTNAME` | The hostnamre to run TSP-Web on | `192.168.0.20`                          | `0.0.0.0` |
+### Configuration
+
+The configuration of `tsp-web` can be found in the folder `$XDG_CONFIG_HOME/tsp-web/config.yml`.
+
+```yaml
+commands:
+  - name: "Sleep"
+    args: ["-L", "sleep", "sleep", "30"]
+
+labels:
+  - name: sleep
+    bgColor: '#0C2880'
+    fgColor: 'black'
+    icon: 💤
+```
