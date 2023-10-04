@@ -1,6 +1,6 @@
 # tsp-web
 
-Displays a overview of the task spooler server of your machine in real time.
+[Task Spooler](https://github.com/justanhduc/task-spooler) real-time Web UI.
 
 ![TSP Web Preview](.github/screenshot.png)
 
@@ -19,11 +19,15 @@ chmod +x ./tsp-web*
 
 ```bash
 ./tsp-web*
+# (Mac) If you're using the Brew package you might wanna change the task spooler binary
+TSP_WEB_TS_BIN=ts ./tsp-web*
 ```
 
 4. Run your first task
 
 ```bash
+tsp -L sleep sleep 30
+# (Mac) If you're using the Brew package you might wanna change the task spooler binary 
 ts -L sleep sleep 30
 ```
 
@@ -39,7 +43,7 @@ ts -L sleep sleep 30
 
 ### Configuration
 
-The configuration of `tsp-web` can be found in the folder `$XDG_CONFIG_HOME/tsp-web/config.yml`.
+The configuration of `tsp-web` can be found in the folder `$XDG_CONFIG_HOME/tsp-web/config.yml` (default `~/.config/tsp-web/config.yml`).
 
 ```yaml
 commands:
