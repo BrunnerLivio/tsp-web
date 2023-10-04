@@ -19,7 +19,7 @@ chmod +x ./tsp-web*
 
 ```bash
 ./tsp-web*
-# (Mac) If you're using the Brew package you might wanna change the task spooler binary
+# Mac: If you're using the Brew package you might wanna change the task spooler binary
 TSP_WEB_TS_BIN=ts ./tsp-web*
 ```
 
@@ -27,7 +27,7 @@ TSP_WEB_TS_BIN=ts ./tsp-web*
 
 ```bash
 tsp -L sleep sleep 30
-# (Mac) If you're using the Brew package you might wanna change the task spooler binary 
+# Mac:
 ts -L sleep sleep 30
 ```
 
