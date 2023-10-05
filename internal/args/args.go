@@ -7,4 +7,5 @@ type TspWebArgs struct {
 	LogLevel   string
 	NoColor    bool
 	Host       string
+	Version    bool
 }

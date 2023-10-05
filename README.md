@@ -40,6 +40,7 @@ ts -L sleep sleep 30
 | `--host`      | `TSP_WEB_HOSTNAME`  | The hostname to run TSP-Web on                      | `192.168.0.20`                          | `localhost` |
 | `--log-level` | `TSP_WEB_LOG_LEVEL` | The log level can be `'debug' or 'info' or 'warn'`  | `warn`                                  | `info`      |
 | `--no-color`  | -                   | Whether the logs should be displayed without colors | -                                       | `false`     |
+| `--version`   | -                   | Prints the version                                  | -                                       |             |
 
 ### Configuration
 
