@@ -20,6 +20,9 @@ import (
 //go:embed web/*
 var static embed.FS
 
+//go:embed .VERSION
+var version string
+
 const maxPort uint64 = 65535
 
 func parseArgs() (args.TspWebArgs, error) {
@@ -29,11 +32,14 @@ func parseArgs() (args.TspWebArgs, error) {
 	logLevel := flag.String("log-level", utils.Getenv("TSP_WEB_LOG_LEVEL", "info"), "The log level for tsp-web")
 	noColor := flag.Bool("no-color", false, "Disable colorized output")
 	host := flag.String("host", utils.Getenv("TSP_WEB_HOSTNAME", "localhost"), "The host for tsp-web")
+	version := flag.Bool("version", false, "Print the version and exit")
 
 	flag.Parse()
 
 	if *portArg > maxPort {
-		return args.TspWebArgs{}, fmt.Errorf("invalid value \"%d\" for flag -port: parse error", *portArg)
+		log.Errorf("invalid value \"%d\" for flag -port: value out of range", *portArg)
+		flag.Usage()
+		os.Exit(1)
 	}
 
 	Port := uint16(*portArg)
@@ -43,7 +49,9 @@ func parseArgs() (args.TspWebArgs, error) {
 		Port:     Port,
 		LogLevel: *logLevel,
 		NoColor:  *noColor,
-		Host:     *host}, nil
+		Host:     *host,
+		Version:  *version,
+	}, nil
 }
 
 func setLogLevel(logLevel string) {
@@ -63,17 +71,17 @@ func main() {
 	api.Static = static
 
 	args, err := parseArgs()
+
+	if args.Version {
+		fmt.Println(version)
+		os.Exit(0)
+	}
+
 	setLogLevel(args.LogLevel)
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
 		DisableColors: args.NoColor,
 	})
-
-	if err != nil {
-		log.Error(err)
-		flag.Usage()
-		os.Exit(1)
-	}
 
 	userconf.Load(args)
 	go userconf.StartWatcher(args)

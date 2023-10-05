@@ -4,6 +4,10 @@
   "scripts": {
     "semantic-release": "semantic-release"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brunnerlivio/tsp-web"
+  },
   "devDependencies": {
     "@semantic-release-plus/docker": "^3.1.2",
     "@semantic-release/changelog": "^6.0.3",

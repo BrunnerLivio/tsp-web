@@ -7,7 +7,32 @@ env:
   IMAGE_NAME: brunnerlivio/tsp-web
 
 jobs:
+  "next-version":
+    permissions:
+      contents: write
+      packages: read
+      pages: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Next version
+        run: DRY_RUN=true npm run semantic-release -- --dry-run --no-ci
+      - name: Archive Version
+        uses: actions/upload-artifact@v3
+        with:
+          name: "VERSION"
+          path: .VERSION
+
   "build":
+    needs: ["next-version"]
     strategy:
       matrix:
         version:
@@ -32,13 +57,13 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: "1.19"
-
+      - uses: actions/download-artifact@master
+        with:
+          name: "VERSION"
       - name: Install dependencies
         run: make install
-
       - name: Build ${{ matrix.version.NAME }}
         run: GOOS=${{ matrix.version.GOOS }} GOARCH=${{ matrix.version.GOARCH }} GOARM=${{ matrix.version.GOARM }} go build -o ${{ matrix.version.OUTPUT }} ./main.go
-
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -46,19 +71,9 @@ jobs:
           path: |
             .bin/*
 
-  "docker-build":
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
   "semantic-release":
     runs-on: ubuntu-latest
-    needs: ["build", "docker-build"]
+    needs: ["build"]
     permissions:
       contents: write
       packages: write
