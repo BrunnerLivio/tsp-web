@@ -1,7 +1,6 @@
 package taskspooler
 
 import (
-	"log"
 	"os/exec"
 	"tsp-web/internal/args"
 	userconf "tsp-web/internal/user-conf"
@@ -30,28 +29,20 @@ type TaskDetail struct {
 	TimeRun       string
 }
 
-func List(args args.TspWebArgs) []Task {
+func List(args args.TspWebArgs) ([]Task, error) {
 	cmd := exec.Command(args.TsBin)
 	out, err := cmd.Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return parseListOutput(string(out))
+	return parseListOutput(string(out)), err
 }
 
-func Detail(args args.TspWebArgs, id string) TaskDetail {
+func Detail(args args.TspWebArgs, id string) (TaskDetail, error) {
 	cmd := exec.Command(args.TsBin, "-i", id)
 	out, err := cmd.Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return parseDetailOutput(string(out))
+	return parseDetailOutput(string(out)), err
 }
 
-func ClearFinishedTasks(args args.TspWebArgs) {
+func ClearFinishedTasks(args args.TspWebArgs) error {
 	cmd := exec.Command(args.TsBin, "-C")
 	err := cmd.Run()
-	if err != nil {
-		log.Fatal(err)
-	}
+	return err
 }

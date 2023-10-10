@@ -6,18 +6,19 @@ import (
 	"tsp-web/internal/args"
 	userconf "tsp-web/internal/user-conf"
 
+	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 )
 
-func CommandController(args args.TspWebArgs) {
-	http.HandleFunc("/api/v1/command", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if r.Method == "GET" {
-			GetCommands(args, w, r)
-		} else {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-		}
-	})
+func CommandController(args args.TspWebArgs, r *mux.Router) {
+	commands := userconf.GetUserConf(args).Commands
+	if commands == nil || len(commands) == 0 {
+		return
+	}
+
+	r.HandleFunc("", func(w http.ResponseWriter, r *http.Request) {
+		GetCommands(args, w, r)
+	}).Methods("GET")
 }
 
 func GetCommands(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {

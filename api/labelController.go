@@ -6,12 +6,12 @@ import (
 	"tsp-web/internal/args"
 	userconf "tsp-web/internal/user-conf"
 
+	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 )
 
-func LabelController(args args.TspWebArgs) {
-	http.HandleFunc("/api/v1/label", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
+func LabelController(args args.TspWebArgs, r *mux.Router) {
+	r.HandleFunc("", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
 			GetLabels(args, w, r)
 		} else if r.Method == "POST" {
@@ -23,7 +23,7 @@ func LabelController(args args.TspWebArgs) {
 		} else {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 		}
-	})
+	}).Methods("GET", "POST", "PUT", "DELETE")
 }
 
 func GetLabels(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
