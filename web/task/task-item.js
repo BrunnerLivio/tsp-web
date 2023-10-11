@@ -97,23 +97,24 @@ export class TaskItem extends LitElement {
     this.isOpen = false;
   }
 
-  async connectedCallback() {
-    super.connectedCallback();
-
-  }
-
-  firstUpdated() {
+  /**
+   * @param {Event} e 
+   */
+  #kill(e) {
+    e.stopPropagation();
+    e.preventDefault();
     if (!this.task) {
       return
     }
 
-    this.shadowRoot?.querySelector(`#task-${this.task.ID}`)?.addEventListener('sl-show', (e) => {
-      this.isOpen = true
-    })
+    if (!confirm(`Are you sure you want to kill task #${this.task.ID}?`)) {
+      return
+    }
 
-    this.shadowRoot?.querySelector(`#task-${this.task.ID}`)?.addEventListener('sl-hide', (e) => {
-      this.isOpen = false
+    fetch(`/api/v1/task-spooler/kill/${this.task.ID}`, {
+      method: 'POST'
     })
+      .then(() => window.dispatchEvent(new CustomEvent('task-list-updated')));
   }
 
   static get properties() {
@@ -197,7 +198,12 @@ export class TaskItem extends LitElement {
     }
 
     return html`
-      <sl-details class=${`task-item ${this.state}`} id=${`task-${this.task.ID}`}>
+      <sl-details
+        class=${`task-item ${this.state}`}
+        id=${`task-${this.task.ID}`}
+        @sl-show=${() => (this.isOpen = true)}
+        @sl-hide=${() => (this.isOpen = false)}
+      >
         <div slot="summary" class="task-item-summary">
           <sl-icon name=${this.icon}></sl-icon>
           <span class="task-item-id">#${this.task.ID}</span>
@@ -205,6 +211,7 @@ export class TaskItem extends LitElement {
           ${this.task.Label ? html`<label-badge .label=${this.task.Label}></label-badge>` : nothing}
           <div class="spacer"></div>
           ${this.timeRun !== null ? html`<span>${this.timeRun}</span>` : nothing}
+          ${this.state === 'running' ? html`<sl-icon-button name="stop-circle" label="Kill" @click=${this.#kill}></sl-icon-button>` : nothing}
         </div>
         
         <div class="task-item-details">

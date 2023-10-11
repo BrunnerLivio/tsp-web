@@ -77,8 +77,9 @@ export class Home extends LitElement {
   async connectedCallback() {
     super.connectedCallback();
     setInterval(async () => {
-      await this.#loadTasks()
-    }, 1000);
+      window.dispatchEvent(new CustomEvent('task-list-updated'));
+    }, 2000);
+    window.addEventListener('task-list-updated', async () => await this.#loadTasks())
     await Promise.all([this.#loadTasks(), this.#loadLabels()])
   }
 

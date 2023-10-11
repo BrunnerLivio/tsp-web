@@ -1,5 +1,6 @@
 // @ts-check
-import { LitElement, css, html, nothing } from 'lit';
+import { LitElement, css, html } from 'lit';
+import { repeat } from "lit-html/directives/repeat.js";
 import './task.js';
 
 export class TaskList extends LitElement {
@@ -52,7 +53,7 @@ export class TaskList extends LitElement {
     await fetch('/api/v1/task-spooler/clear', {
       method: 'POST'
     });
-    this.dispatchEvent(new CustomEvent('task-list-updated'));
+    window.dispatchEvent(new CustomEvent('task-list-updated'));
   }
 
   render() {
@@ -75,7 +76,7 @@ export class TaskList extends LitElement {
           <header class="task-list-header">
             <span class="task-list-title">Scheduled</span>
           </header>
-          ${scheduledTasks.length > 0 ? scheduledTasks.map((task) => html`
+          ${scheduledTasks.length > 0 ? repeat(scheduledTasks, task => task.ID, (task) => html`
             <task-item .task=${task}></task-item>
           `) :
         'No scheduled tasks'}
@@ -88,7 +89,7 @@ export class TaskList extends LitElement {
               Clear 
             </sl-button>
           </header>
-        ${completedTasks.length > 0 ? completedTasks.map((task) => html`
+        ${completedTasks.length > 0 ? repeat(completedTasks, task => task.ID, (task) => html`
             <task-item .task=${task}></task-item>
         `) :
         'No completed tasks'}
@@ -99,19 +100,3 @@ export class TaskList extends LitElement {
 }
 
 customElements.define('task-list', TaskList);
-
-
-// if (window["WebSocket"]) {
-//   const conn = new WebSocket("ws://" + document.location.host + "/ws");
-//   console.log('connecting')
-//   conn.onopen = () => {
-//     console.log('Connected')
-//     conn.send('asdf')
-//   }
-//   conn.onclose = function (evt) {
-//     console.log('Closed')
-//   };
-//   conn.onmessage = function (evt) {
-//     console.log('Message')
-//   };
-// } 

@@ -34,6 +34,18 @@ func TaskSpoolerController(args args.TspWebArgs, r *mux.Router) {
 	r.HandleFunc("/exec", func(w http.ResponseWriter, r *http.Request) {
 		PostExec(args, w, r)
 	}).Methods("POST")
+
+	r.HandleFunc("/kill/{id}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		id := vars["id"]
+
+		err := taskspooler.Kill(args, id)
+		if err != nil {
+			log.Error(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	}).Methods("POST")
 }
 
 func GetList(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {

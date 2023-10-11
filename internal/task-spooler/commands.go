@@ -46,3 +46,9 @@ func ClearFinishedTasks(args args.TspWebArgs) error {
 	err := cmd.Run()
 	return err
 }
+
+func Kill(args args.TspWebArgs, id string) error {
+	cmd := exec.Command(args.TsBin, "-k", id)
+	err := cmd.Run()
+	return err
+}
