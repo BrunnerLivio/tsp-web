@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
 	"strconv"
 	"tsp-web/api"
 	"tsp-web/internal/args"
@@ -67,6 +68,30 @@ func setLogLevel(logLevel string) {
 	}
 }
 
+func ensureTsBinExists(tsBin string) {
+	cmd := exec.Command(tsBin)
+	err := cmd.Run()
+	if err != nil {
+		log.Fatalf(`Error running tsp binary: %s
+
+Troubleshooting:
+1. Did you install tsp?
+
+# Debian/Ubuntu
+$ sudo apt install task-spooler
+
+# Mac
+$ brew install task-spooler
+
+2. Did you set the correct path to tsp with the --ts-bin flag or TSP_WEB_TS_BIN env variable?
+
+# Mac
+$ tsp-web --ts-bin ts
+
+`, err)
+	}
+}
+
 func main() {
 	api.Static = static
 
@@ -82,6 +107,8 @@ func main() {
 		FullTimestamp: true,
 		DisableColors: args.NoColor,
 	})
+
+	ensureTsBinExists(args.TsBin)
 
 	userconf.Load(args)
 	go userconf.StartWatcher(args)

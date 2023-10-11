@@ -41,6 +41,7 @@ export class CommandList extends LitElement {
       .then(response => response.json())
       .then(data => {
         console.log(data);
+        window.dispatchEvent(new CustomEvent('task-list-updated'));
       });
   }
 

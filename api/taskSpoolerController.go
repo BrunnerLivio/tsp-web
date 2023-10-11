@@ -8,6 +8,7 @@ import (
 	taskspooler "tsp-web/internal/task-spooler"
 	userconf "tsp-web/internal/user-conf"
 
+	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -21,40 +22,42 @@ type ExecRes struct {
 	ID int
 }
 
-func TaskSpoolerController(args args.TspWebArgs) {
-	http.HandleFunc("/api/v1/task-spooler/list", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
+func TaskSpoolerController(args args.TspWebArgs, r *mux.Router) {
+	r.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
+		GetList(args, w, r)
+	}).Methods("GET")
 
-		if r.Method == "GET" {
-			GetList(args, w, r)
-		} else {
-			w.WriteHeader(http.StatusMethodNotAllowed)
+	r.HandleFunc("/clear", func(w http.ResponseWriter, r *http.Request) {
+		PostClear(args, w, r)
+	}).Methods("POST")
+
+	r.HandleFunc("/exec", func(w http.ResponseWriter, r *http.Request) {
+		PostExec(args, w, r)
+	}).Methods("POST")
+
+	r.HandleFunc("/kill/{id}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		id := vars["id"]
+
+		err := taskspooler.Kill(args, id)
+		if err != nil {
+			log.Error(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
 		}
-	})
-
-	http.HandleFunc("/api/v1/task-spooler/clear", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-
-		if r.Method == "POST" {
-			PostClear(args, w, r)
-		} else {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-		}
-	})
-
-	http.HandleFunc("/api/v1/task-spooler/exec", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-
-		if r.Method == "POST" {
-			PostExec(args, w, r)
-		}
-	})
+	}).Methods("POST")
 }
 
 func GetList(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 	labels, _ := userconf.GetLabels(args)
 
-	currentTasks := taskspooler.List(args)
+	currentTasks, err := taskspooler.List(args)
+
+	if err != nil {
+		log.Error(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	for i, task := range currentTasks {
 		for _, label := range labels {
@@ -76,7 +79,12 @@ func GetList(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 		}
 
 		if !hasFoundCachedDetail {
-			currentTasks[i].Detail = taskspooler.Detail(args, task.ID)
+			currentTasks[i].Detail, err = taskspooler.Detail(args, task.ID)
+			if err != nil {
+				log.Error(err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
 		}
 	}
 
@@ -93,7 +101,12 @@ func GetList(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 }
 
 func PostClear(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
-	taskspooler.ClearFinishedTasks(args)
+	err := taskspooler.ClearFinishedTasks(args)
+	if err != nil {
+		log.Error(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func PostExec(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {

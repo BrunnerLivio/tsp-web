@@ -3,14 +3,13 @@ package api
 import (
 	"embed"
 	"fmt"
-	"io/fs"
 	"net/http"
-	"regexp"
 	"strings"
+	util "tsp-web/internal"
 	"tsp-web/internal/args"
 	taskspooler "tsp-web/internal/task-spooler"
-	userconf "tsp-web/internal/user-conf"
 
+	"github.com/gorilla/mux"
 	"github.com/olahol/melody"
 	log "github.com/sirupsen/logrus"
 )
@@ -22,23 +21,11 @@ var allowOriginFunc = func(r *http.Request) bool {
 var Static embed.FS
 
 func Run(args args.TspWebArgs) error {
-	// Static
-	web, _ := fs.Sub(Static, "web")
-	fs := http.FileServer(http.FS(web))
-
-	fileMatcher := regexp.MustCompile(`\.[a-zA-Z]*$`)
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if !fileMatcher.MatchString(r.URL.Path) {
-			var index, _ = Static.ReadFile("web/index.html")
-			w.Write(index)
-		} else {
-			fs.ServeHTTP(w, r)
-		}
-	})
+	router := mux.NewRouter()
 
 	// Websocket
 	m := melody.New()
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		m.HandleRequest(w, r)
 	})
 
@@ -55,14 +42,24 @@ func Run(args args.TspWebArgs) error {
 	})
 
 	// API
-	TaskSpoolerController(args)
-	LabelController(args)
+	api := router.PathPrefix("/api/v1").Subrouter()
 
-	commands := userconf.GetUserConf(args).Commands
-	if commands != nil && len(commands) > 0 {
-		CommandController(args)
-	}
+	api.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			next.ServeHTTP(w, r)
+		})
+	})
 
+	LabelController(args, api.PathPrefix("/label").Subrouter())
+	TaskSpoolerController(args, api.PathPrefix("/task-spooler").Subrouter())
+	CommandController(args, api.PathPrefix("/command").Subrouter())
+
+	// SPA
+	spa := util.SpaHandler{StaticFS: Static, StaticPath: "web", IndexPath: "index.html"}
+	router.PathPrefix("/").Handler(spa)
+
+	http.Handle("/", router)
 	log.Info("Running server on http://0.0.0.0:", args.Port)
 
 	return http.ListenAndServe(fmt.Sprintf("%s:%d", args.Host, args.Port), nil)
