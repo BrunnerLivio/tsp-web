@@ -9,7 +9,7 @@ export class LabelFilter extends LitElement {
 
   constructor() {
     super();
-    /** @type {Label[]} */
+    /** @type {import('../api.js').Label[]} */
     this.labels = [];
     this.isLoading = true;
   }

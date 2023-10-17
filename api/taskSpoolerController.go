@@ -49,7 +49,7 @@ func TaskSpoolerController(args args.TspWebArgs, r *mux.Router) {
 }
 
 func GetList(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
-	labels, _ := userconf.GetLabels(args)
+	labels := userconf.GetUserConf(args).Labels
 
 	currentTasks, err := taskspooler.List(args)
 
@@ -118,7 +118,7 @@ func PostExec(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	allCommands := userconf.GetCommands(args)
+	allCommands := userconf.GetUserConf(args).Commands
 
 	var foundCommand *userconf.Command
 	for _, c := range allCommands {

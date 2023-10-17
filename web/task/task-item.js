@@ -1,9 +1,9 @@
 // @ts-check
 import { LitElement, css, html, nothing } from "lit";
 import { intervalToDuration } from "date-fns";
-import './task.js'
 import { formatDuration } from "../utils.js";
 import './task-log.js'
+import { api } from "../api.js";
 
 export class TaskItem extends LitElement {
   static styles = css`
@@ -92,7 +92,7 @@ export class TaskItem extends LitElement {
 
   constructor() {
     super();
-    /** @type {Task | null} */
+    /** @type {import("../api.js").Task | null} */
     this.task = null;
     this.isOpen = false;
   }
@@ -111,9 +111,7 @@ export class TaskItem extends LitElement {
       return
     }
 
-    fetch(`/api/v1/task-spooler/kill/${this.task.ID}`, {
-      method: 'POST'
-    })
+    api.taskSpooler.kill(this.task.ID)
       .then(() => window.dispatchEvent(new CustomEvent('task-list-updated')));
   }
 

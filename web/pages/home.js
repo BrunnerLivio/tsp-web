@@ -1,24 +1,24 @@
 // @ts-check
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import '../task/task-list.js'
 import '../task/task-item.js'
 import '../label/label-badge.js'
 import '../label/label-filter.js'
-import '../label/label.js'
 import '../command/command-list.js'
 import '../card.js'
+import { api } from "../api.js";
 
 export class Home extends LitElement {
   constructor() {
     super();
-    /** @type {Task[]} */
+    /** @type {import("../api.js").Task[]} */
     this.tasks = [];
-    /** @type {Task[]} */
+    /** @type {import("../api.js").Task[]} */
     this.filteredTasks = [];
-    /** @type {Label[]} */
-    this.labels = [];
+    /** @type {Partial<import("../api.js").Config>} */
+    this.config = {};
     this.isLoadingTasks = true;
-    this.isLoadingLabels = true;
+    this.isLoadingConfig = true;
     /**
      * @type {{ label: string }}
      */
@@ -52,16 +52,14 @@ export class Home extends LitElement {
   }
 
   async #loadTasks() {
-    this.tasks = await fetch('/api/v1/task-spooler/list')
-      .then(response => response.json())
+    this.tasks = await api.taskSpooler.list();
     this.#filterTasks();
     this.isLoadingTasks = false;
   }
 
-  async #loadLabels() {
-    this.labels = await fetch('/api/v1/label')
-      .then(response => response.json())
-    this.isLoadingLabels = false;
+  async #loadConfig() {
+    this.config = await api.config.get();
+    this.isLoadingConfig = false;
   }
 
   #filterTasks() {
@@ -80,7 +78,7 @@ export class Home extends LitElement {
       window.dispatchEvent(new CustomEvent('task-list-updated'));
     }, 2000);
     window.addEventListener('task-list-updated', async () => await this.#loadTasks())
-    await Promise.all([this.#loadTasks(), this.#loadLabels()])
+    await Promise.all([this.#loadTasks(), this.#loadConfig()])
   }
 
   /**
@@ -93,13 +91,19 @@ export class Home extends LitElement {
 
 
   render() {
+    const hasCommands = (this.config.Commands || []).length > 0;
+
+    const commandsCard = html`
+    <app-card title="Commands">
+      <command-list .commands=${this.config.Commands || []} .isLoading=${this.isLoadingConfig}></command-list>
+    </app-card>
+    `
+
     return html`
       <div class="container">
-        <app-card title="Commands">
-          <command-list></command-list>
-        </app-card>
+        ${hasCommands ? commandsCard : nothing}
         <app-card title="Tasks">
-          <label-filter @filter-changed="${this.#updateFilter}" .labels=${this.labels} .isLoading=${this.isLoadingLabels}></label-filter>
+          <label-filter @filter-changed="${this.#updateFilter}" .labels=${this.config.Labels || []} .isLoading=${this.isLoadingConfig}></label-filter>
           <task-list @task-list-updated="${this.#loadTasks}" .tasks=${this.filteredTasks} .isLoading=${this.isLoadingTasks}></task-list>
         </app-card>
       </div>

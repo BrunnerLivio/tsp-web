@@ -1,17 +1,19 @@
 // @ts-check
-import { LitElement, html, css } from 'lit';
-
-
+import { LitElement, html, css, nothing } from 'lit';
+import { api } from '../api.js';
 
 export class CommandList extends LitElement {
   constructor() {
     super();
+    /** @type {import('../api.js').Command[]} */
     this.commands = [];
+    this.isLoading = true;
   }
 
   static get properties() {
     return {
-      commands: { type: Array, attribute: false }
+      commands: { type: Array },
+      isLoading: { type: Boolean },
     }
   }
 
@@ -24,29 +26,17 @@ export class CommandList extends LitElement {
     }
   `;
 
-  async #loadCommands() {
-    this.commands = await fetch('/api/v1/command')
-      .then(response => response.json())
-  }
-
-  firstUpdated(_changedProperties) {
-    super.firstUpdated(_changedProperties);
-    this.#loadCommands();
-  }
 
   #exec(command) {
-    fetch(`/api/v1/task-spooler/exec`, {
-      method: 'POST', body: JSON.stringify({ Name: command.Name })
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        window.dispatchEvent(new CustomEvent('task-list-updated'));
-      });
+    api.taskSpooler.exec(command.Name)
+      .then(() => window.dispatchEvent(new CustomEvent('task-list-updated')));
   }
 
 
   render() {
+    if (this.isLoading) {
+      return nothing;
+    }
     return html`
       <div class="container">
       ${this.commands.map((command) => {

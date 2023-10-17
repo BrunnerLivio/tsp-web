@@ -21,6 +21,12 @@ labels:
     bgColor: '#0C2880'
     fgColor: 'black'
     icon: 💤
+
+# To use a custom sockets, uncomment the "sockets" block
+#sockets:
+#  - name: "Default"
+#  - name: "Other"
+#    path: "/tmp/other.sock"
 `
 
 type Label struct {
@@ -35,9 +41,15 @@ type Command struct {
 	Args []string `yaml:"args"`
 }
 
+type Socket struct {
+	Name string `yaml:"name"`
+	Path string `yaml:"path"`
+}
+
 type UserConf struct {
 	Labels   []Label   `yaml:"labels"`
 	Commands []Command `yaml:"commands"`
+	Sockets  []Socket  `yaml:"sockets"`
 }
 
 var cachedConf UserConf = UserConf{}

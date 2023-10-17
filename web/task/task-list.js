@@ -1,12 +1,11 @@
 // @ts-check
 import { LitElement, css, html } from 'lit';
 import { repeat } from "lit-html/directives/repeat.js";
-import './task.js';
 
 export class TaskList extends LitElement {
   constructor() {
     super();
-    /** @type {Task[]} */
+    /** @type {import('../api').Task[]} */
     this.tasks = [];
     this.isLoading = true;
   }
