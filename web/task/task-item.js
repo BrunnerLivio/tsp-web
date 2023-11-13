@@ -195,6 +195,19 @@ export class TaskItem extends LitElement {
       return nothing;
     }
 
+    /** @type {import('lit').TemplateResult<1> | typeof import('lit').nothing} */
+    let label = nothing;
+    if (this.task.Label) {
+      label = html`<label-badge
+        .icon=${this.task.Label.Icon}
+        .bgColor=${this.task.Label.BgColor}
+        .fgColor=${this.task.Label.FgColor}
+        .name=${this.task.Label.Name}
+      ></label-badge>`;
+    } else if (this.task.LabelName) {
+      label = html`<label-badge .name=${this.task.LabelName}></label-badge>`;
+    }
+
     return html`
       <sl-details
         class=${`task-item ${this.state}`}
@@ -206,7 +219,7 @@ export class TaskItem extends LitElement {
           <sl-icon name=${this.icon}></sl-icon>
           <span class="task-item-id">#${this.task.ID}</span>
           <strong>${this.task.Command}</strong>
-          ${this.task.Label ? html`<label-badge .label=${this.task.Label}></label-badge>` : nothing}
+          ${label}
           <div class="spacer"></div>
           ${this.timeRun !== null ? html`<span>${this.timeRun}</span>` : nothing}
           ${this.state === 'running' ? html`<sl-icon-button name="stop-circle" label="Kill" @click=${this.#kill}></sl-icon-button>` : nothing}

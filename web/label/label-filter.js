@@ -63,12 +63,12 @@ export class LabelFilter extends LitElement {
     return html`
       <div class="container">
         <a href="#" @click="${() => this.#updateUrlLabel('all')}">
-          <label-badge .label=${{ Name: 'All', BgColor: 'var(--sl-color-primary-500)' }}></label-badge>
+          <label-badge name="All" bgColor="var(--sl-color-primary-500)"></label-badge>
         </a>
 
         ${this.labels.map((label) => html`
           <a href="#" @click="${() => this.#updateUrlLabel(label.Name)}">
-            <label-badge  .label=${label}></label-badge>
+            <label-badge .name=${label.Name} .icon=${label.Icon} .bgColor=${label.BgColor} .fgColor=${label.FgColor}></label-badge>
           </a>
         `)}
       </div>

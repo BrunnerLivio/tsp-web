@@ -4,8 +4,10 @@ import { LitElement, html, css } from "lit";
 export class LabelBadge extends LitElement {
   constructor() {
     super();
-    /** @type {import('../api.js').Label | null} */
-    this.label = null;
+    this.icon = '';
+    this.name = '';
+    this.bgColor = 'gray';
+    this.fgColor = '';
     this.clickable = false;
   }
 
@@ -42,14 +44,17 @@ export class LabelBadge extends LitElement {
 
   static get properties() {
     return {
-      label: { type: Object },
+      icon: { type: String },
+      name: { type: String },
+      bgColor: { type: String },
+      fgColor: { type: String },
       clickable: { type: Boolean }
     }
   }
 
   render() {
     return html`
-      <span class="badge" style="background: ${this.label?.BgColor}">${this.label?.Icon} ${this.label?.Name}</span>
+      <span class="badge" style="background: ${this.bgColor}; color: ${this.fgColor}">${this.icon} ${this.name}</span>
     `;
   }
 }
