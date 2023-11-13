@@ -5,7 +5,7 @@ import { repeat } from "lit-html/directives/repeat.js";
 export class TaskList extends LitElement {
   constructor() {
     super();
-    /** @type {import('../api').Task[]} */
+    /** @type {import('../api.js').Task[]} */
     this.tasks = [];
     this.isLoading = true;
   }

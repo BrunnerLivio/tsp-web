@@ -26,7 +26,9 @@ export class CommandList extends LitElement {
     }
   `;
 
-
+  /**
+   * @param {import('../api.js').Command} command 
+   */
   #exec(command) {
     api.taskSpooler.exec(command.Name)
       .then(() => window.dispatchEvent(new CustomEvent('task-list-updated')));

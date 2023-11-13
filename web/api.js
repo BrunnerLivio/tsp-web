@@ -51,10 +51,23 @@
 
 const taskSpooler = {
   /**
+   * @type {string}
+   */
+  socket: 'default',
+
+  /**
+   * @param {string} socket 
+   */
+  setSocket: (socket) => {
+    taskSpooler.socket = socket
+  },
+
+  /**
    * @param {string} id 
    */
   kill: async (id) => {
-    await fetch(`/api/v1/task-spooler/kill/${id}`, { method: 'POST' })
+    const query = new URLSearchParams({ socket: taskSpooler.socket })
+    await fetch(`/api/v1/task-spooler/kill/${id}?${query}`, { method: 'POST' })
   },
 
   /**
@@ -62,7 +75,9 @@ const taskSpooler = {
    * @returns {Promise<Task[]>}
    */
   list: async () => {
-    return await fetch('/api/v1/task-spooler/list').then(response => response.json())
+    const query = new URLSearchParams({ socket: taskSpooler.socket })
+    return await fetch(`/api/v1/task-spooler/list?${query}`)
+      .then(response => response.json())
   },
 
   /**
@@ -70,7 +85,8 @@ const taskSpooler = {
    * @returns {Promise<Task>}
    */
   exec: async (name) => {
-    return await fetch(`/api/v1/task-spooler/exec`, {
+    const query = new URLSearchParams({ socket: taskSpooler.socket })
+    return await fetch(`/api/v1/task-spooler/exec?${query}`, {
       method: 'POST', body: JSON.stringify({ Name: name })
     })
       .then(response => response.json())

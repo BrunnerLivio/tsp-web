@@ -1,12 +1,13 @@
 // @ts-check
 import { LitElement, html, css, nothing } from "lit";
+import { api } from "../api.js";
 import '../task/task-list.js'
 import '../task/task-item.js'
 import '../label/label-badge.js'
 import '../label/label-filter.js'
 import '../command/command-list.js'
 import '../card.js'
-import { api } from "../api.js";
+import '../socket/socket-dropdown.js'
 
 export class Home extends LitElement {
   constructor() {
@@ -31,6 +32,17 @@ export class Home extends LitElement {
       display: flex;
       flex-direction: column;
       gap: var(--sl-spacing-large);
+    }
+
+    :host .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    :host .card-title h2 {
+      font-size: 16px;
+      font-weight: 500;
     }
 
     @media (min-width: 768px) {
@@ -92,6 +104,7 @@ export class Home extends LitElement {
 
   render() {
     const hasCommands = (this.config.Commands || []).length > 0;
+    const hasSockets = (this.config.Sockets || []).length > 0;
 
     const commandsCard = html`
     <app-card title="Commands">
@@ -102,7 +115,11 @@ export class Home extends LitElement {
     return html`
       <div class="container">
         ${hasCommands ? commandsCard : nothing}
-        <app-card title="Tasks">
+        <app-card>
+          <div slot="title" class="card-title">
+            <h2>Tasks</h2>
+            ${hasSockets ? html`<socket-dropdown .sockets=${this.config.Sockets || []}></socket-dropdown>` : nothing}
+          </div>
           <label-filter @filter-changed="${this.#updateFilter}" .labels=${this.config.Labels || []} .isLoading=${this.isLoadingConfig}></label-filter>
           <task-list @task-list-updated="${this.#loadTasks}" .tasks=${this.filteredTasks} .isLoading=${this.isLoadingTasks}></task-list>
         </app-card>
