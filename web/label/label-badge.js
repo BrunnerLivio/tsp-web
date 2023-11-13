@@ -1,11 +1,10 @@
 // @ts-check
 import { LitElement, html, css } from "lit";
-import './label.js';
 
 export class LabelBadge extends LitElement {
   constructor() {
     super();
-    /** @type {Label | null} */
+    /** @type {import('../api.js').Label | null} */
     this.label = null;
     this.clickable = false;
   }

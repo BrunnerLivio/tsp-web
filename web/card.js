@@ -31,7 +31,7 @@ export class Card extends LitElement {
     }
 
 
-    :host h2 {
+    :host h2, :host slot[name="title"]::slotted(*) {
       margin: 0 0 var(--sl-spacing-large) 0;
       font-weight: 500;
       font-size: 16px;
@@ -49,7 +49,7 @@ export class Card extends LitElement {
   render() {
     return html`
       <div class="card">
-        <h2>${this.title}</h2>
+        ${this.title ? html`<h2>${this.title}</h2>` : html`<slot name="title"></slot>`}
         <slot></slot>
       </div>
     `;

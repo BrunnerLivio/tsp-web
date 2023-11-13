@@ -51,9 +51,8 @@ func Run(args args.TspWebArgs) error {
 		})
 	})
 
-	LabelController(args, api.PathPrefix("/label").Subrouter())
+	ConfigController(args, api.PathPrefix("/config").Subrouter())
 	TaskSpoolerController(args, api.PathPrefix("/task-spooler").Subrouter())
-	CommandController(args, api.PathPrefix("/command").Subrouter())
 
 	// SPA
 	spa := util.SpaHandler{StaticFS: Static, StaticPath: "web", IndexPath: "index.html"}

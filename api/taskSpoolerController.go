@@ -2,8 +2,8 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
-	"os/exec"
 	"tsp-web/internal/args"
 	taskspooler "tsp-web/internal/task-spooler"
 	userconf "tsp-web/internal/user-conf"
@@ -24,22 +24,40 @@ type ExecRes struct {
 
 func TaskSpoolerController(args args.TspWebArgs, r *mux.Router) {
 	r.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
-		GetList(args, w, r)
+		res, err := GetList(args, getEnv(r), w, r)
+
+		if err != nil {
+			log.Error(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.Write(res)
 	}).Methods("GET")
 
 	r.HandleFunc("/clear", func(w http.ResponseWriter, r *http.Request) {
-		PostClear(args, w, r)
+		err := taskspooler.ClearFinishedTasks(args, getEnv(r))
+		if err != nil {
+			log.Error(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 	}).Methods("POST")
 
 	r.HandleFunc("/exec", func(w http.ResponseWriter, r *http.Request) {
-		PostExec(args, w, r)
+		res, err := PostExec(args, w, r, getEnv(r))
+		if err != nil {
+			log.Error(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		w.Write(res)
 	}).Methods("POST")
 
 	r.HandleFunc("/kill/{id}", func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		id := vars["id"]
-
-		err := taskspooler.Kill(args, id)
+		err := taskspooler.Kill(args, id, getEnv(r))
 		if err != nil {
 			log.Error(err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -48,15 +66,12 @@ func TaskSpoolerController(args args.TspWebArgs, r *mux.Router) {
 	}).Methods("POST")
 }
 
-func GetList(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
-	labels, _ := userconf.GetLabels(args)
-
-	currentTasks, err := taskspooler.List(args)
+func GetList(args args.TspWebArgs, env map[string]string, w http.ResponseWriter, r *http.Request) (res []byte, err error) {
+	labels := userconf.GetUserConf(args).Labels
+	currentTasks, err := taskspooler.List(args, env)
 
 	if err != nil {
-		log.Error(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		return nil, err
 	}
 
 	for i, task := range currentTasks {
@@ -79,46 +94,26 @@ func GetList(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 		}
 
 		if !hasFoundCachedDetail {
-			currentTasks[i].Detail, err = taskspooler.Detail(args, task.ID)
+			currentTasks[i].Detail, err = taskspooler.Detail(args, task.ID, env)
 			if err != nil {
-				log.Error(err)
-				w.WriteHeader(http.StatusInternalServerError)
-				return
+				return nil, err
 			}
 		}
 	}
 
 	cachedTasks = currentTasks
 
-	res, err := json.Marshal(currentTasks)
-	if err != nil {
-		log.Error(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	w.Write(res)
+	return json.Marshal(currentTasks)
 }
 
-func PostClear(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
-	err := taskspooler.ClearFinishedTasks(args)
-	if err != nil {
-		log.Error(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-}
-
-func PostExec(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
+func PostExec(args args.TspWebArgs, w http.ResponseWriter, r *http.Request, env map[string]string) (res []byte, erro error) {
 	var command ExecArg
 	err := json.NewDecoder(r.Body).Decode(&command)
 	if err != nil {
-		log.Error(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		return nil, err
 	}
 
-	allCommands := userconf.GetCommands(args)
+	allCommands := userconf.GetUserConf(args).Commands
 
 	var foundCommand *userconf.Command
 	for _, c := range allCommands {
@@ -129,22 +124,27 @@ func PostExec(args args.TspWebArgs, w http.ResponseWriter, r *http.Request) {
 	}
 
 	if foundCommand == nil {
-		log.Error("Command not found: ", command.Name)
-		w.WriteHeader(http.StatusNotFound)
-		return
+		return nil, errors.New("Command not found")
 	}
 
 	log.Info("Executing command from user request with args: ", args.TsBin, foundCommand.Args)
-	cmd := exec.Command(args.TsBin, foundCommand.Args...)
-	out, err := cmd.Output()
-	if err != nil {
-		log.Error("Error executing command: ", err)
-		w.WriteHeader(http.StatusInternalServerError)
+	arguments := append([]string{args.TsBin}, foundCommand.Args...)
+	out, err := taskspooler.Execute(env, arguments...)
+
+	var result ExecRes
+	result.ID = int(out[0])
+	resJson, _ := json.Marshal(result)
+	return resJson, nil
+}
+
+func getEnv(r *http.Request) map[string]string {
+	socket := r.URL.Query().Get("socket")
+
+	env := map[string]string{}
+
+	if socket != "default" && socket != "" {
+		env["TS_SOCKET"] = socket
 	}
 
-	var res ExecRes
-	res.ID = int(out[0])
-
-	resJson, _ := json.Marshal(res)
-	w.Write(resJson)
+	return env
 }
