@@ -5,7 +5,7 @@ import { connect } from '../ws.js';
 export class TaskLog extends LitElement {
   constructor() {
     super();
-    /** @type {Task | null} */
+    /** @type {import('../api.js').Task | null} */
     this.task = null;
     /** @type {WebSocket | null} */
     this.conn = null

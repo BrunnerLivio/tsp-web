@@ -24,6 +24,13 @@ export class Home extends LitElement {
      * @type {{ label: string }}
      */
     this.filter = { label: 'all' };
+
+    this.intervalId = setInterval(() => {
+      console.log('getting called')
+      window.dispatchEvent(new CustomEvent('task-list-updated'));
+    }, 2000)
+
+    window.addEventListener('task-list-updated', async () => await this.#loadTasks())
   }
 
   static styles = css`
@@ -84,13 +91,16 @@ export class Home extends LitElement {
     }
   }
 
-  async connectedCallback() {
+  connectedCallback() {
     super.connectedCallback();
-    setInterval(async () => {
-      window.dispatchEvent(new CustomEvent('task-list-updated'));
-    }, 2000);
-    window.addEventListener('task-list-updated', async () => await this.#loadTasks())
-    await Promise.all([this.#loadTasks(), this.#loadConfig()])
+    void Promise.all([this.#loadTasks(), this.#loadConfig()])
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.intervalId !== null) {
+      clearInterval(this.intervalId);
+    }
   }
 
   /**

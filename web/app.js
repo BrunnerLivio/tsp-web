@@ -1,6 +1,6 @@
 // @ts-check
 import { LitElement, html, css } from 'lit';
-import { Router } from '@vaadin/router';
+import './pages/home.js';
 
 export class App extends LitElement {
   static styles = css`
@@ -60,19 +60,6 @@ export class App extends LitElement {
     }
   `;
 
-  firstUpdated(_changedProperties) {
-    super.firstUpdated(_changedProperties);
-    const router = new Router(this.shadowRoot?.querySelector('#outlet'));
-    router.setRoutes([
-      {
-        path: '/', action: async () => {
-          await import('./pages/home.js');
-        },
-        component: 'app-home'
-      }
-    ]);
-  }
-
   render() {
     return html`
       <header>
@@ -81,7 +68,9 @@ export class App extends LitElement {
         </div>
       </header>
       <main>
-        <div id="outlet"></div>
+        <div id="outlet">
+          <app-home></app-home>
+        </div>
       </main>
     `;
   }

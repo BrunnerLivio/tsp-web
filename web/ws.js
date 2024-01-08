@@ -8,14 +8,14 @@ export function connect() {
     const conn = new WebSocket("ws://" + document.location.host + "/ws");
 
     /**
-     * @param {Task} task
+     * @param {import("./api").Task} task
      */
     function startFilestream(task) {
       conn.send(`start-filestream:${task.Output}`)
     }
 
     /**
-     * @param {Task} task
+     * @param {import("./api").Task} task
      */
     function stopFilestream(task) {
       conn.send(`stop-filestream:${task.Output}`)
