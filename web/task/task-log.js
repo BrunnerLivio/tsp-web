@@ -1,6 +1,7 @@
 // @ts-check
 import { LitElement, html, css } from 'lit';
 import { connect } from '../ws.js';
+import { AnsiUp } from 'ansi_up';
 
 export class TaskLog extends LitElement {
   constructor() {
@@ -62,12 +63,19 @@ export class TaskLog extends LitElement {
       return;
     }
 
+    this.$output = this.shadowRoot?.querySelector('#output');
+
     const { conn, startFilestream } = await connect();
 
     this.conn = conn;
     startFilestream(this.task);
+    const ansiUp = new AnsiUp();
     conn.onmessage = (event) => {
-      this.log = event.data;
+      if (!this.$output) {
+        return;
+      }
+
+      this.$output.innerHTML = ansiUp.ansi_to_html(event.data);
       this.handleNewLog();
     }
   }
@@ -101,7 +109,7 @@ export class TaskLog extends LitElement {
     return html`
       <div class="filename">${this.fileName}</div>
       <code class="logs">
-        <pre>${this.log !== '' ? this.log : 'No logs'}</pre>
+        <pre id="output">${this.log !== '' ? this.log : 'No logs'}</pre>
       </code>
     `;
   }

@@ -26,7 +26,6 @@ export class Home extends LitElement {
     this.filter = { label: 'all' };
 
     this.intervalId = setInterval(() => {
-      console.log('getting called')
       window.dispatchEvent(new CustomEvent('task-list-updated'));
     }, 2000)
 
