@@ -26,7 +26,7 @@ jobs:
       - name: Next version
         run: DRY_RUN=true npm run semantic-release -- --dry-run --no-ci
       - name: Archive Version
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "VERSION"
           path: .VERSION
@@ -65,7 +65,7 @@ jobs:
       - name: Build ${{ matrix.version.NAME }}
         run: GOOS=${{ matrix.version.GOOS }} GOARCH=${{ matrix.version.GOARCH }} GOARM=${{ matrix.version.GOARM }} go build -o ${{ matrix.version.OUTPUT }} ./main.go
       - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "tsp-web"
           path: |
